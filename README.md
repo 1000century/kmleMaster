@@ -4,7 +4,7 @@
 - 의사 국가고시, 임상종합의학평가 문제의 PDF파일
 - 방식: PDF 전처리 후 OCR 작업 수행
 
-## 1. 유사 문제 검색 [https://github.com/1000century/kmleMaster/model/README.md]
+## 1. 유사 문제 검색 [https://github.com/1000century/kmleMaster/model]
 - 유사도 검색 알고리즘: rank_bm25
 - 토크나이저: bert-base-multilingual-cased
 - 사용 범위: 각 문제의 'text' 부분으로 한정
