@@ -12,7 +12,7 @@
 ### 목표
 - 토큰 기반 **유사 문제 검색 알고리즘 개발**
 - **유사도 검색 알고리즘:** `rank_bm25`
-- **토크나이저:** `bert-base-multilingual-cased`
+- **토크나이저:** `LeverageX/finbert-wechsel-korean`
 - **검색 범위:** 각 문제의 `text` 부분으로 한정
 - **출력 결과 설정:** `Top 2`
 
