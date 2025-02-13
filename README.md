@@ -28,10 +28,8 @@
 - `남아` → `남` + `아` 형태보다는 `남아` 그대로 토큰화되는 것이 이상적
 - 너무 크거나 작지 않은 단위로 토크나이징 되는 **적절한 토크나이저 선택**이 중요
 - 자주 등장하는 주요 단어들 중심으로 분석
-
-![토크나이저 분석](https://github.com/user-attachments/assets/7f688e0f-8d3f-4e0c-80bd-e51e0407796d)
-
 #### 토크나이저로 분할된 토큰 개수 분석
-![토큰 개수 분석](https://github.com/user-attachments/assets/f21942c6-530d-4aac-85a8-9b9c061509f1)
-
----
+<table>
+  <td><img src="https://github.com/user-attachments/assets/7f688e0f-8d3f-4e0c-80bd-e51e0407796d"</td>
+  <td><img src="https://github.com/user-attachments/assets/f21942c6-530d-4aac-85a8-9b9c061509f1"</td>
+</table>
