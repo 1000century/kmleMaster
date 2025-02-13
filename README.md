@@ -7,7 +7,7 @@
 
 ---
 
-## 1. [유사 문제 검색](https://github.com/1000century/kmleMaster/blob/main/model)
+## 1. [유사 문제 검색 알고리즘](https://github.com/1000century/kmleMaster/blob/main/model)
 
 <table>
   <tr>
