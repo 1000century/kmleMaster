@@ -7,7 +7,7 @@
 ---
 
 ## 1. [유사 문제 검색](https://github.com/1000century/kmleMaster/blob/main/model)
-![image](https://github.com/user-attachments/assets/4bb3246b-d2ad-42d2-8744-f91575aa58f0)
+![image](https://github.com/user-attachments/assets/4e3c369b-6f1b-459b-8f69-2130583f752e)
 
 ### 목표
 - 토큰 기반 **유사 문제 검색 알고리즘 개발**
