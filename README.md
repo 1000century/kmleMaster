@@ -10,8 +10,8 @@
 
 <table>
   <tr>
-    <td><img src="https://github.com/user-attachments/assets/4e3c369b-6f1b-459b-8f69-2130583f752e" width="45%"></td>
-    <td><img src="https://github.com/user-attachments/assets/95ff0d00-44f3-4df3-aa45-5ee7af82917d" width="45%"></td>
+    <td><img src="https://github.com/user-attachments/assets/4e3c369b-6f1b-459b-8f69-2130583f752e"></td>
+    <td><img src="https://github.com/user-attachments/assets/95ff0d00-44f3-4df3-aa45-5ee7af82917d"></td>
   </tr>
 </table>
 
