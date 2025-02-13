@@ -5,7 +5,8 @@
 - 방식: PDF 전처리 후 OCR 작업 수행
 
 ## 1. 유사 문제 검색
-- rank_bm25 사용
-- bert-base-multilingual-cased 토크나이저 사용
-- 상위 2개 사용 '문제' 부분만 사용
+- 유사도 검색 알고리즘: rank_bm25
+- 토크나이저: bert-base-multilingual-cased
+- 사용 범위: 각 문제의 'text' 부분으로 한정
+- 출력 결과 설정: Top2
 - https://github.com/1000century/kmleMaster/blob/main/model/similar.md
