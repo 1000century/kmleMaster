@@ -12,6 +12,9 @@
 - https://github.com/1000century/kmleMaster/blob/main/model/similar.md
 
 ### 1-1. 토크나이저 분석결과
-![image](https://github.com/user-attachments/assets/4848a6a4-655d-43b2-8a9f-3eb9cad603f5)
+- 특정 단어 포함 여부 확인
+  ![image](https://github.com/user-attachments/assets/7f688e0f-8d3f-4e0c-80bd-e51e0407796d)
+- 토크나이저로 쪼개진 토큰 개수
+  ![image](https://github.com/user-attachments/assets/f21942c6-530d-4aac-85a8-9b9c061509f1)
 
-- 
+
