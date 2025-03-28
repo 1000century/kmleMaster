@@ -11,10 +11,10 @@
     padded_input_ids = []
     for i, ids in enumerate(input_ids_list):
         pad_len = max_len - len(ids)
-        # ⬅️ 왼쪽 padding
+        # left padding
         padded = torch.cat([torch.full((pad_len,), tokenizer.pad_token_id, dtype=torch.long), ids])
         padded_input_ids.append(padded)
-        raw_batch.append(batch_samples[i])  # ✅ 원본 sample 저장
+        raw_batch.append(batch_samples[i])
     
     input_ids = torch.stack(padded_input_ids)
     attention_mask = (input_ids != tokenizer.pad_token_id).long()
