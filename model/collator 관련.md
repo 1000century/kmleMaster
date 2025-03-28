@@ -21,5 +21,5 @@
     
     return {"input_ids": input_ids, "attention_mask": attention_mask}, raw_batch
   
-dataloader = DataLoader(tokenized_dataset_splits['test'], batch_size=64, collate_fn=collate_fn)
+  dataloader = DataLoader(tokenized_dataset_splits['test'], batch_size=64, collate_fn=collate_fn)
 ```
