@@ -96,7 +96,8 @@ metrics={'train_runtime': 3861.812,
   'train_samples_per_second': 0.773,
   'train_steps_per_second': 0.024, 
   'total_flos': 1.8958207197364224e+16, 
-  'train_loss': 0.22870307419729488})```
+  'train_loss': 0.22870307419729488})
+```
 
 ### After FT - temperature 0.7
 정답 개수: 295/374
