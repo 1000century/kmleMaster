@@ -9,6 +9,7 @@ KAGGLE version 65
 앞으로 보완해야 할 점
 - 프롬프트를 한국어로 할지 영어로 할지
 - 데이터 불균형 해결 방안
+- `DataCollatorForCompletionOnlyLM` 을 사용하는 것이 맞는지 고민하기
 ```
 
 
