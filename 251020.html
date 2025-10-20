@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>진단검사의학과 기출 복원 퀴즈</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+                Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            background-color: #f4f7f6;
+            color: #333;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        h1, h2 {
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 8px;
+            color: #0056b3;
+        }
+        h1 {
+            text-align: center;
+        }
+        .quiz-section {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+        }
+        .question {
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .question p {
+            margin: 0 0 10px 0;
+            font-weight: bold;
+        }
+        .question ul {
+            list-style-type: none;
+            padding-left: 0;
+            font-weight: normal;
+        }
+        .question li {
+            margin-bottom: 5px;
+        }
+        .show-answer-btn {
+            margin-top: 10px;
+            padding: 8px 15px;
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #fff;
+            background-color: #28a745;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .show-answer-btn:hover {
+            background-color: #218838;
+        }
+        .answer-content {
+            display: none;
+            background-color: #e6f7ff;
+            border: 1px dashed #007bff;
+            border-radius: 5px;
+            padding: 12px;
+            margin-top: 8px;
+        }
+        .answer-content strong {
+            color: #0056b3;
+            font-size: 1.05em;
+        }
+        .answer-explanation {
+            font-size: 0.95em;
+            color: #204a87;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🧭 진단검사의학과 기출 복원 퀴즈 (30문제)</h1>
+
+    <div class="quiz-section">
+        <h2>1. 정도관리 / 검사실 관리</h2>
+        <div class="question">
+            <p>1. [객관식] 다음 중 외부 정도관리(External Quality Control)에 해당하는 것은?</p>
+            <ul>
+                <li>① 델타 체크 (Delta check)</li>
+                <li>② 패닉 체크 (Panic check)</li>
+                <li>③ 레비제닝스 관리도 (Levey-Jennings chart)</li>
+                <li>④ 웨스트가드 다중규칙 (Westgard rules)</li>
+                <li>⑤ 검사실 간 비교 분석 (Inter-laboratory comparison)</li>
+            </ul>
+            <button class="show-answer-btn" onclick="toggleAnswer(1)">정답 확인</button>
+            <div class="answer-content" id="answer-1">
+                <strong>정답: ⑤ 검사실 간 비교 분석</strong>
+                <div class="answer-explanation">
+                    <br><strong>해설:</strong><br>
+                    • <strong>외부정도관리(External QC)</strong>: 검사실 간 비교 분석, 숙련도 검사 등<br>
+                    • <strong>내부정도관리(Internal QC)</strong>:<br>
+                    &nbsp;&nbsp;- 델타 체크: 같은 환자의 이전 검사 결과와 비교<br>
+                    &nbsp;&nbsp;- 패닉 체크: 생명을 위협할 수 있는 극단적 수치 확인<br>
+                    &nbsp;&nbsp;- Levey-Jennings 관리도: 정도관리 물질의 측정값을 시간에 따라 그래프로 표시<br>
+                    &nbsp;&nbsp;- Westgard 다중규칙: 정도관리 결과의 이상 여부를 판단하는 규칙
+                </div>
+            </div>
+        </div>
+        <div class="question">
+            <p>2. [객관식] Westgard 다중규칙(Westgard rules)에서 'Warning Rule'로 간주되어 즉각적인 조치(Out of Control)를 요구하지 않는 규칙은?</p>
+            <ul>
+                <li>① 1(3s)</li>
+                <li>② 2(2s)</li>
+                <li>③ R(4s)</li>
+                <li>④ 1(2s)</li>
+            </ul>
+            <button class="show-answer-btn" onclick="toggleAnswer(2)">정답 확인</button>
+            <div class="answer-content" id="answer-2">
+                <strong>정답: ④ 1(2s)</strong>
+                <div class="answer-explanation">
+                    <br><strong>해설:</strong><br>
+                    • <strong>1(2s) - Warning Rule</strong>: 한 개의 측정값이 평균±2SD를 벗어난 경우 → 경고만, 즉각 조치 불필요<br>
+                    • <strong>Out of Control 규칙들</strong>:<br>
+                    &nbsp;&nbsp;- 1(3s): 한 측정값이 평균±3SD 벗어남 → 무작위 오차<br>
+                    &nbsp;&nbsp;- 2(2s): 연속 2개 측정값이 같은 방향으로 평균±2SD 벗어남 → 계통 오차<br>
+                    &nbsp;&nbsp;- R(4s): 한 run 내 두 측정값의 범위가 4SD 이상 → 무작위 오차<br>
+                    &nbsp;&nbsp;- 4(1s): 연속 4개가 같은 방향으로 평균±1SD 벗어남 → 계통 오차<br>
+                    &nbsp;&nbsp;- 10x: 연속 10개가 평균의 같은 방향에 있음 → 계통 오차
+                </div>
+            </div>
+        </div>
+        <div class="question">
+            <p>3. [T/F] 검체 채취 시 발생한 용혈(Hemolysis)은 '검사 중 오차(Analytical error)'가 아닌 '검사 전 오차(Pre-analytical error)'에 해당한다. (O / X)</p>
+            <button class="show-answer-btn" onclick="toggleAnswer(3)">정답 확인</button>
+            <div class="answer-content" id="answer-3">
+                <strong>정답: O (참)</strong>
+                <div class="answer-explanation">
+                    <br><strong>해설:</strong><br>
+                    • <strong>검사 전 오차(Pre-analytical error)</strong>: 전체 오차의 60-70% 차지<br>
+                    &nbsp;&nbsp;- 검체 채취 오류: 용혈, 응고, 지방혈증<br>
+                    &nbsp;&nbsp;- 환자 준비 불량: 금식 미준수, 운동 후 채혈<br>
+                    &nbsp;&nbsp;- 검체 보관/운송 오류: 부적절한 온도, 시간 지연<br>
+                    &nbsp;&nbsp;- 검체 식별 오류: 라벨링 실수<br><br>
+                    • <strong>검사 중 오차(Analytical error)</strong>: 기기 오작동, 시약 문제, 정도관리 실패<br>
+                    • <strong>검사 후 오차(Post-analytical error)</strong>: 보고 지연, 결과 해석 오류
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="quiz-section">
+        <h2>2. 수혈 / 혈액형 검사</h2>
+        <div class="question">
+            <p>4. [객관식] 응급 수혈이 필요한 상황에서 절대 금기(absolute contraindication)에 해당하는 조합은?</p>
+            <ul>
+                <li>① AB형 환자에게 A형 전혈 수혈</li>
+                <li>② A형 환자에게 AB형 농축적혈구 수혈</li>
+                <li>③ AB형 환자에게 A형 농축혈소판 수혈</li>
+                <li>④ 혈액형 모르는 환자에게 O형 적혈구 수혈</li>
+            </ul>
+            <button class="show-answer-btn" onclick="toggleAnswer(4)">정답 확인</button>
+            <div class="answer-content" id="answer-4">
+                <strong>정답: ② A형 환자에게 AB형 농축적혈구 수혈</strong>
+                <div class="answer-explanation">
+                    <br><strong>해설:</strong><br>
+                    • A형 환자는 Anti-B 항체 보유 → AB형 RBC(B항원 있음)와 반응 → <strong>급성 용혈성 수혈반응</strong><br><br>
+                    <strong>ABO 혈액형 항원-항체:</strong><br>
+                    &nbsp;&nbsp;- A형: A항원 보유, Anti-B 항체 보유<br>
+                    &nbsp;&nbsp;- B형: B항원 보유, Anti-A 항체 보유<br>
+                    &nbsp;&nbsp;- AB형: A, B 항원 모두 보유, 항체 없음 (universal receiver)<br>
+                    &nbsp;&nbsp;- O형: 항원 없음, Anti-A, Anti-B 모두 보유 (universal donor)<br><br>
+                    <strong>다른 선택지:</strong><br>
+                    ① AB형→A형 전혈: 전혈은 혈장 포함(Anti-B 있음) → 상대적 금기<br>
+                    ③ AB형→A형 혈소판: 소량 혈장 포함, 응급시 가능<br>
+                    ④ O형 RBC는 항원 없어 응급수혈로 안전
+                </div>
+            </div>
+        </div>
+        <div class="question">
+            <p>5. [단답형] 400mL 전혈(Whole Blood)의 표준 보관 온도는 몇 °C 이며, 보존 기간은 며칠인가?</p>
+            (온도: __°C, 기간: __일)
+            <button class="show-answer-btn" onclick="toggleAnswer(5)">정답 확인</button>
+            <div class="answer-content" id="answer-5">
+                <strong>정답: 온도: 4°C, 기간: 35일</strong>
+                <div class="answer-explanation">
+                    <br><strong>해설 - 혈액제제 보관 온도 및 기간:</strong><br>
+                    • <strong>전혈(Whole Blood)</strong>: 1-6°C, 35일<br>
+                    • <strong>농축적혈구(pRBC)</strong>: 1-6°C, 35일<br>
+                    • <strong>신선동결혈장(FFP)</strong>: -18°C 이하, 1년<br>
+                    • <strong>농축혈소판(Platelet)</strong>: 20-24°C, 진탕 보관, 5일<br>
+                    • <strong>동결적혈구</strong>: -65°C 이하, 10년<br><br>
+                    ※ 혈소판은 실온 보관하며 응집 방지를 위해 계속 흔들어야 함
+                </div>
+            </div>
+        </div>
+        <div class="question">
+            <p>6. [단답형] ABO 혈액형 검사에서 Anti-A 시약의 표준 색깔은 무엇인가?</p>
+            <button class="show-answer-btn" onclick="toggleAnswer(6)">정답 확인</button>
+            <div class="answer-content" id="answer-6">
+                <strong>정답: 파란색 (Blue)</strong>
+                <div class="answer-explanation">
+                    <br><strong>해설 - ABO 혈액형 시약 색깔 표준화:</strong><br>
+                    • <strong>Anti-A</strong>: 파란색 (Blue) 캡<br>
+                    • <strong>Anti-B</strong>: 노란색 (Yellow) 캡<br>
+                    • <strong>Anti-D (Rh)</strong>: 무색 또는 투명 캡<br><br>
+                    → 시약 오인식별 방지를 위한 국제 표준
+                </div>
+            </div>
+        </div>
+        <div class="question">
+            <p>7. [단답형] ABO 혈액형 검사에서 Anti-B 시약의 표준 색깔은 무엇인가?</p>
+            <button class="show-answer-btn" onclick="toggleAnswer(7)">정답 확인</button>
+            <div class="answer-content" id="answer-7">
+                <strong>정답: 노란색 (Yellow)</strong>
+                <div class="answer-explanation">
+                    <br><strong>암기 팁:</strong><br>
+                    • Anti-<strong>A</strong> = <strong>A</strong>zure (하늘색/파란색)<br>
+                    • Anti-<strong>B</strong> = <strong>Y</strong>ellow (B는 알파벳 2번째, Y는 마지막에서 2번째)<br>
+                    • 혹은: A(파란색 'ㅍ'의 첫소리가 A), B(노란색 'ㄴ'으로 시작)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="quiz-section">
+        <h2>3. 분자진단 (PCR, NGS, HLA 등)</h2>
+        <div class="question">
+            <p>8. [단답형] PCR (Polymerase Chain Reaction)의 3단계를 순서대로 쓰시오. (A, B, C)</p>
+            <button class="show-answer-btn" onclick="toggleAnswer(8)">정답 확인</button>
+            <div class="answer-content" id="answer-8">
+                <strong>정답: Denaturation (변성), Annealing (결합), Extension (신장)</strong>
+                <div class="answer-explanation">
+                    <br><strong>PCR 3단계 상세 해설:</strong><br>
+                    <strong>1. Denaturation (변성)</strong>: 94-95°C<br>
+                    &nbsp;&nbsp;- 이중가닥 DNA → 단일가닥 DNA로 분리<br>
+                    &nbsp;&nbsp;- 수소결합 파괴<br><br>
+                    <strong>2. Annealing (결합/어닐링)</strong>: 50-65°C<br>
+                    &nbsp;&nbsp;- Primer가 주형 DNA의 상보적 서열에 결합<br>
+                    &nbsp;&nbsp;- 온도는 Primer의 Tm 값에 따라 결정<br><br>
+                    <strong>3. Extension (신장/연장)</strong>: 72°C<br>
+                    &nbsp;&nbsp;- DNA polymerase가 primer로부터 DNA 합성<br>
+                    &nbsp;&nbsp;- Taq polymerase의 최적 온도<br>
+                    &nbsp;&nbsp;- 5'→3' 방향으로 진행<br><br>
+                    → 이 3단계를 25-40회 반복하여 DNA 증폭
+                </div>
+            </div>
+        </div>
+        <div class="question">
+            <p>9. [단답형] 이식 대기 환자의 혈청 내에 이미 존재하는 HLA 항체 유무를 검출하고 그 특이성을 동정하는 검사는 무엇인가? (약어)</p>
+            <button class="show-answer-btn" onclick="toggleAnswer(9)">정답 확인</button>
+            <div class="answer-content" id="answer-9">
+                <strong>정답: PRA (Panel Reactive Antibody)</strong>
+                <div class="answer-explanation">
+                    <br><strong>해설:</strong><br>
+                    • <strong>PRA (Panel Reactive Antibody)</strong><br>
+                    &nbsp;&nbsp;- 이식 대기 환자의 감작(sensitization) 정도 평가<br>
+                    &nbsp;&nbsp;- 여러 공여자의 림프구 패널과 환자 혈청 반응<br>
+                    &nbsp;&nbsp;- 결과: % 단위 (예: PRA 80% = 80%의 공여자와 양성 반응)<br>
+                    &nbsp;&nbsp;- PRA가 높을수록: 적합한 공여자 찾기 어려움<br><br>
+                    • <strong>감작 원인</strong>: 임신, 수혈, 이전 이식 경험
+                </div>
+            </div>
+        </div>
+        <div class="question">
+            <p>10. [단답형] 장기 이식 직전, 공여자(Donor)의 림프구와 수여자(Recipient)의 혈청을 반응시켜 공여자 특이 항체가 있는지 확인하는 검사는 무엇인가?</p>
+            <button class="show-answer-btn" onclick="toggleAnswer(10)">정답 확인</button>
+            <div class="answer-content" id="answer-10">
+                <strong>정답: HLA crossmatching (HLA 교차시험)</strong>
+                <div class="answer-explanation">
+                    <br><strong>해설:</strong><br>
+                    • <strong>HLA Crossmatching (교차시험)</strong><br>
+                    &nbsp;&nbsp;- 이식 직전 최종 확인 검사<br>
+                    &nbsp;&nbsp;- Donor 림프구 + Recipient 혈청 반응<br>
+                    &nbsp;&nbsp;- 양성 결과: 이식 금기 (초급성 거부반응 위험)<br>
+                    &nbsp;&nbsp;- 음성 결과: 이식 가능<br><br>
+                    <strong>검사 방법:</strong><br>
+                    &nbsp;&nbsp;- CDC (Complement-Dependent Cytotoxicity): 전통적 방법<br>
+                    &nbsp;&nbsp;- Flow cytometry crossmatch: 더 민감<br><br>
+                    <strong>이식 검사 순서:</strong> HLA typing → PRA → Crossmatching
+                </div>
+            </div>
+        </div>
+        <div class="question">
+            <p>11. [빈칸 채우기] 1세대 염기서열 분석법은 ( A ) 기법이라고도 하며, 2세대 NGS 기법은 ( B )이라고도 불린다.</p>
+            <button class="show-answer-btn" onclick="toggleAnswer(11)">정답 확인</button>
+            <div class="answer-content" id="answer-11">
+                <strong>정답: A: Sanger sequencing, B: Massively parallel sequencing</strong>
+                <div class="answer-explanation">
+                    <br><strong>염기서열 분석 세대 구분:</strong><br>
+                    • <strong>1세대: Sanger sequencing</strong><br>
+                    &nbsp;&nbsp;- Dideoxy chain-termination method<br>
+                    &nbsp;&nbsp;- ddNTP 사용하여 DNA 합성 종결<br>
+                    &nbsp;&nbsp;- 한 번에 하나의 서열 분석<br>
+                    &nbsp;&nbsp;- 정확도 높음 (99.99%)<br><br>
+                    • <strong>2세대: NGS (Next-Generation Sequencing)</strong><br>
+                    &nbsp;&nbsp;- Massively parallel sequencing<br>
+                    &nbsp;&nbsp;- 수백만 개 DNA 조각을 동시 분석<br>
+                    &nbsp;&nbsp;- 빠르고 비용 효율적<br>
+                    &nbsp;&nbsp;- 예: Illumina, Ion Torrent<br><br>
+                    • <strong>3세대</strong>: PacBio, Oxford Nanopore (단일 분자 실시간 분석)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="quiz-section">
+        <h2>4. 간염 / 감염병 / 매독 검사</h2>
+        <div class="question">
+            <p>12. [객관식] B형 간염 혈청 검사 결과, HBsAg(+), Anti-HBs(-), Anti-HBc IgM(+) 소견일 때 가장 적절한 해석은?</p>
+            <ul>
+                <li>① B형 간염 예방접종 후 (Vaccination)</li>
+                <li>② 급성 B형 간염 (Acute hepatitis B)</li>
+                <li>③ 만성 B형 간염 - 활발한 복제 (Chronic hepatitis B)</li>
+                <li>④ 과거 감염 후 회복 (Recovered)</li>
+            </ul>
+            <button class="show-answer-btn" onclick="toggleAnswer(12)">정답 확인</button>
+            <div class="answer-content" id="answer-12">
+                <strong>정답: ② 급성 B형 간염 (Acute hepatitis B)</strong>
+                <div class="answer-explanation">
+                    <br><strong>해설 - B형 간염 표지자:</strong><br>
+                    • <strong>HBsAg (+)</strong>: 현재 감염 상태<br>
+                    • <strong>Anti-HBs (-)</strong>: 면역 없음<br>
+                    • <strong>Anti-HBc IgM (+)</strong>: 급성 감염의 핵심 표지자<br><br>
+                    <strong>주요 B형 간염 표지자 정리:</strong><br>
+                    &nbsp;&nbsp;- <strong>HBsAg</strong>: 표면항원, 감염 지표<br>
+                    &nbsp;&nbsp;- <strong>Anti-HBs</strong>: 표면항체, 면역/회복 지표<br>
+                    &nbsp;&nbsp;- <strong>HBeAg</strong>: e항원, 전염성 높음<br>
+                    &nbsp;&nbsp;- <strong>Anti-HBe</strong>: e항체, 바이러스 복제 감소<br>
+                    &nbsp;&nbsp;- <strong>Anti-HBc IgM</strong>: 급성 감염<br>
+                    &nbsp;&nbsp;- <strong>Anti-HBc IgG</strong>: 과거 감염 또는 만성 감염
+                </div>
+            </div>
+        </div>
+        <div class="question">
+            <p>13. [객관식] B형 간염 혈청 검사 결과, HBsAg(-), Anti-HBs(+), Anti-HBc(-) 소견일 때 가장 적절한 해석은?</p>
+            <ul>
+                <li>① 급성 B형 간염 (Acute hepatitis B)</li>
+                <li>② 만성 B형 간염 (Chronic hepatitis B)</li>
+                <li>③ 과거 감염 후 회복 (Recovered)</li>
+                <li>④ B형 간염 예방접종 후 (Vaccination)</li>
+            </ul>
+            <button class="show-answer-btn" onclick="toggleAnswer(13)">정답 확인</button>
+            <div class="answer-content" id="answer-13">
+                <strong>정답: ④ B형 간염 예방접종 후 (Vaccination)</strong>
+                <div class="answer-explanation">
+                    <br><strong>핵심 감별점:</strong><br>
+                    • <strong>Anti-HBs (+)</strong>: 면역 획득<br>
+                    • <strong>Anti-HBc (-)</strong>: 과거 감염 이력 없음 → 예방접종으로 획득한 면역<br><br>
+                    <strong>B형 간염 상태별 표지자 패턴:</strong><br>
+                    <table style="width:100%; font-size:0.85em; margin-top:8px;">
+                        <tr style="background:#e6f7ff;"><th>상태</th><th>HBsAg</th><th>Anti-HBs</th><th>Anti-HBc</th></tr>
+                        <tr><td>예방접종</td><td>-</td><td>+</td><td>-</td></tr>
+                        <tr><td>과거 감염 회복</td><td>-</td><td>+</td><td>+ (IgG)</td></tr>
+                        <tr><td>급성 감염</td><td>+</td><td>-</td><td>+ (IgM)</td></tr>
+                        <tr><td>만성 감염</td><td>+</td><td>-</td><td>+ (IgG)</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="question">
+            <p>14. [객관식] 다음 매독 검사 중, 매독균에 대한 특이 항원(Treponemal antigen)을 사용하는 확진 검사(Treponemal test)는 무엇인가?</p>
+            <ul>
+                <li>① VDRL</li>
+                <li>② RPR</li>
+                <li>③ FTA-ABS</li>
+                <li>④ CRP</li>
+            </ul>
+            <button class="show-answer-btn" onclick="toggleAnswer(14)">정답 확인</button>
+            <div class="answer-content" id="answer-14">
+                <strong>정답: ③ FTA-ABS</strong>
+                <div class="answer-explanation">
+                    <br><strong>매독 검사 분류:</strong><br>
+                    • <strong>Non-treponemal test (비특이적 검사)</strong>:<br>
+                    &nbsp;&nbsp;- VDRL, RPR<br>
+                    &nbsp;&nbsp;- 심장지질 항원 사용<br>
+                    &nbsp;&nbsp;- 선별검사, 치료 모니터링에 사용<br>
+                    &nbsp;&nbsp;- 위양성 가능 (임신, 자가면역질환 등)<br><br>
+                    • <strong>Treponemal test (특이적 검사)</strong>:<br>
+                    &nbsp;&nbsp;- FTA-ABS, TPHA, TP-PA<br>
+                    &nbsp;&nbsp;- 매독균(Treponema pallidum) 항원 사용<br>
+                    &nbsp;&nbsp;- 확진검사<br>
+                    &nbsp;&nbsp;- 한번 양성이면 평생 양성 유지<br><br>
+                    ※ CRP는 염증 표지자로 매독 검사와 무관
+                </div>
+            </div>
+        </div>
+        <div class="question">
+            <p>15. [단답형] 현재 HIV 감염의 확진 검사(confirmatory test)로 사용되는 방법은 무엇인가?</p>
+            <button class="show-answer-btn" onclick="toggleAnswer(15)">정답 확인</button>
+            <div class="answer-content" id="answer-15">
+                <strong>정답: Western blot (또는 HIV-1/2 differentiation immunoassay)</strong>
+                <div class="answer-explanation">
+                    <br><strong>HIV 검사 알고리즘:</strong><br>
+                    <strong>1단계: 선별검사</strong><br>
+                    &nbsp;&nbsp;- 4세대 HIV Ag/Ab combo test (ELISA)<br>
+                    &nbsp;&nbsp;- p24 항원 + HIV 항체 동시 검출<br><br>
+                    <strong>2단계: 확진검사</strong><br>
+                    &nbsp;&nbsp;- <strong>Western blot</strong> (전통적 방법)<br>
+                    &nbsp;&nbsp;- HIV-1/2 differentiation immunoassay (최근)<br>
+                    &nbsp;&nbsp;- HIV-1 RNA PCR (viral load)<br><br>
+                    <strong>Window period</strong>:<br>
+                    &nbsp;&nbsp;- 감염 후 항체 생성까지 2-4주<br>
+                    &nbsp;&nbsp;- 4세대 검사: p24 항원으로 1-2주로 단축
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="quiz-section">
+        <h2>5. 혈액검사 (CBC, RBC Index, INR 등)</h2>
+        <div class="question">
+            <p>16. [단답형] 적혈구의 평균 크기(부피)를 반영하는 RBC index는 무엇인가? (약어)</p>
+            <button class="show-answer-btn" onclick="toggleAnswer(16)">정답 확인</button>
+            <div class="answer-content" id="answer-16">
+                <strong>정답: MCV (Mean Corpuscular Volume)</strong>
+                <div class="answer-explanation">
+                    <br><strong>적혈구 지수 (RBC indices):</strong><br>
+                    • <strong>MCV</strong> (Mean Corpuscular Volume): 평균 적혈구 용적<br>
+                    &nbsp;&nbsp;- 정상: 80-100 fL<br>
+                    &nbsp;&nbsp;- ↑ Macrocytic anemia (거대적아구성 빈혈: B12, 엽산 결핍)<br>
+                    &nbsp;&nbsp;- ↓ Microcytic anemia (소구성 빈혈: 철결핍, 지중해빈혈)<br><br>
+                    • <strong>MCH</strong> (Mean Corpuscular Hemoglobin): 평균 적혈구 혈색소량<br>
+                    • <strong>MCHC</strong> (Mean Corpuscular Hemoglobin Concentration): 평균 적혈구 혈색소 농도<br>
+                    • <strong>RDW</strong> (Red cell Distribution Width): 적혈구 크기 분포 폭
+                </div>
+            </div>
+        </div>
+        <div class="question">
+            <p>17. [단답형] 전체 혈액 내에서 적혈구가 차지하는 분율(부피비)을 의미하는 용어는 무엇인가? (약어)</p>
+            <button class="show-answer-btn" onclick="toggleAnswer(17)">정답 확인</button>
+            <div class="answer-content" id="answer-17">
+                <strong>정답: Hct (Hematocrit)</strong>
+                <div class="answer-explanation">
+                    <br><strong>Hematocrit (적혈구용적률):</strong><br>
+                    • 전체 혈액 중 적혈구가 차지하는 부피 비율 (%)<br>
+                    • 정상치: 남자 40-54%, 여자 36-48%<br>
+                    • Hct ↓: 빈혈, 출혈, 용혈<br>
+                    • Hct ↑: 탈수, 진성 다혈구증<br><br>
+                    <strong>관계식:</strong><br>
+                    Hct (%) ≈ Hb (g/dL) × 3<br>
+                    예: Hb 15 g/dL → Hct ≈ 45%
+                </div>
+            </div>
+        </div>
+        <div class="question">
+            <p>18. [단답형] 환자의 PT(Prothrombin Time)가 24초, 정상 PT가 12초, ISI(International Sensitivity Index)가 2.0일 때, INR 값은 얼마인가? (숫자만 입력)</p>
+            <button class="show-answer-btn" onclick="toggleAnswer(18)">정답 확인</button>
+            <div class="answer-content" id="answer-18">
+                <strong>정답: 4</strong>
+                <div class="answer-explanation">
+                    <br><strong>INR 계산식:</strong><br>
+                    INR = (환자 PT / 정상 PT)<sup>ISI</sup><br>
+                    = (24 / 12)<sup>2.0</sup><br>
+                    = 2<sup>2</sup><br>
+                    = <strong>4</strong><br><br>
+                    <strong>INR (International Normalized Ratio):</strong><br>
+                    • PT 결과를 표준화한 값<br>
+                    • Warfarin 치료 모니터링에 사용<br>
+                    • 정상: 0.8-1.2<br>
+                    • 목표 INR: 2.0-3.0 (심방세동, DVT 등)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.5-3.5 (기계판막)<br>
+                    • INR ↑: 출혈 위험, Warfarin 과다
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="quiz-section">
+        <h2>6. 미생물학 / 배양 조건 / 염색법</h2>
+        <div class="question">
+            <p>19. [단답형] Campylobacter jejuni는 ( __ )°C의 고온에서 미호기성(microaerophilic) 조건으로 배양해야 한다. (숫자만 입력)</p>
+            <button class="show-answer-btn" onclick="toggleAnswer(19)">정답 확인</button>
+            <div class="answer-content" id="answer-19">
+                <strong>정답: 42</strong>
+            </div>
+        </div>
+        <div class="question">
+            <p>20. [T/F] 객담(Sputum) 검체는 일반적인 세균 배양을 위해 35°C, CO2 환경에서 배양하는 것이 적절하다. (O / X)</p>
+            <button class="show-answer-btn" onclick="toggleAnswer(20)">정답 확인</button>
+            <div class="answer-content" id="answer-20">
+                <strong>정답: O (참)</strong>
+                <span class="answer-explanation">: 대부분의 호흡기 병원균 배양에 적합한 조건입니다.</span>
+            </div>
+        </div>
+        <div class="question">
+            <p>21. [객관식] 그람 염색 결과, 백혈구 세포 내에서 Safranin O에 의해 붉게 염색된 쌍구균(Gram-negative intracellular diplococci)이 관찰되었다. 가장 의심되는 균은?</p>
+            <ul>
+                <li>① Streptococcus pneumoniae</li>
+                <li>② Staphylococcus aureus</li>
+                <li>③ Neisseria gonorrhoeae</li>
+                <li>④ Enterococcus faecalis</li>
+            </ul>
+            <button class="show-answer-btn" onclick="toggleAnswer(21)">정답 확인</button>
+            <div class="answer-content" id="answer-21">
+                <strong>정답: ③ Neisseria gonorrhoeae</strong>
+                <span class="answer-explanation">: 그람 음성(붉은색), 세포 내(intracellular), 쌍구균(diplococci)은 임균(N. gonorrhoeae)의 전형적인 특징입니다.</span>
+            </div>
+        </div>
+        <div class="question">
+            <p>22. [단답형] 그람 염색 과정에서 Crystal violet 염색액을 고정시키는 매염제(mordant) 역할을 하는 시약은 무엇인가?</p>
+            <button class="show-answer-btn" onclick="toggleAnswer(22)">정답 확인</button>
+            <div class="answer-content" id="answer-22">
+                <strong>정답: Gram's Iodine (요오드 용액)</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="quiz-section">
+        <h2>7. 면역학 / 자가면역 / 유세포분석</h2>
+        <div class="question">
+            <p>23. [객관식] 다음 검사 중 유세포분석(Flow cytometry)을 이용하는 검사가 아닌 것은?</p>
+            <ul>
+                <li>① Lymphocyte subset (T/B/NK cell)</li>
+                <li>② PNH (발작성 야간 혈색소뇨증) 검사</li>
+                <li>③ 유전구형적혈구증 (EMA binding) 검사</li>
+                <li>④ FANA (Fluorescent Antinuclear Antibody) 검사</li>
+            </ul>
+            <button class="show-answer-btn" onclick="toggleAnswer(23)">정답 확인</button>
+            <div class="answer-content" id="answer-23">
+                <strong>정답: ④ FANA (Fluorescent Antinuclear Antibody) 검사</strong>
+                <span class="answer-explanation">: FANA는 면역형광 현미경(IF)을 이용한 검사입니다. 1, 2, 3번은 모두 유세포분석의 주요 활용 사례입니다.</span>
+            </div>
+        </div>
+        <div class="question">
+            <p>24. [단답형] 항원-항체 반응 검사에서 항원이나 항체가 상대적으로 과잉 존재하여 오히려 응집 반응이 억제되는 현상을 무엇이라고 하는가?</p>
+            <button class="show-answer-btn" onclick="toggleAnswer(24)">정답 확인</button>
+            <div class="answer-content" id="answer-24">
+                <strong>정답: 지대 현상 (Zone phenomenon)</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="quiz-section">
+        <h2>8. 유전학 / 염색체 이상</h2>
+        <div class="question">
+            <p>25. [단답형] 9번과 22번 염색체 간의 상호 전위, t(9;22)로 인해 생성되는 필라델피아 염색체(Philadelphia chromosome)와 관련된 대표적인 혈액암은 무엇인가? (약어)</p>
+            <button class="show-answer-btn" onclick="toggleAnswer(25)">정답 확인</button>
+            <div class="answer-content" id="answer-25">
+                <strong>정답: CML (Chronic Myeloid Leukemia, 만성 골수성 백혈병)</strong>
+            </div>
+        </div>
+        <div class="question">
+            <p>26. [단답형] 다운 증후군(Down syndrome)을 가진 남성의 염색체 핵형(karyotype)을 표준 표기법으로 쓰시오.</p>
+            <button class="show-answer-btn" onclick="toggleAnswer(26)">정답 확인</button>
+            <div class="answer-content" id="answer-26">
+                <strong>정답: 47,XY,+21</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="quiz-section">
+        <h2>9. 기타 기초 진단검사 이론</h2>
+        <div class="question">
+            <p>27. [빈칸 채우기] 정맥 채혈 튜브 순서는 다음과 같다:<br>
+            [혈액배양] → [ A: ______ (하늘색) ] → [ B: ______ (SST) ] → [ C: ______ (녹색) ] → [ D: ______ (보라색) ]</p>
+            <button class="show-answer-btn" onclick="toggleAnswer(27)">정답 확인</button>
+            <div class="answer-content" id="answer-27">
+                <strong>정답: A: Citrate, B: SST (Serum), C: Heparin, D: EDTA</strong>
+            </div>
+        </div>
+        <div class="question">
+            <p>28. [단답형] DNA를 제한 효소(restriction enzyme)로 처리하여 생성되는 DNA 단편들의 길이와 양상을 비교 분석하는 유전자 다형성 분석법은 무엇인가? (약어)</p>
+            <button class="show-answer-btn" onclick="toggleAnswer(28)">정답 확인</button>
+            <div class="answer-content" id="answer-28">
+                <strong>정답: RFLP (Restriction Fragment Length Polymorphism)</strong>
+            </div>
+        </div>
+        <div class="question">
+            <p>29. [단답형] 급성기 반응 물질(Acute phase reactants) 중 감염이나 염증 발생 시 가장 신속하게 증가했다가 가장 빨리 정상화되는 표지자는 무엇인가? (약어)</p>
+            <button class="show-answer-btn" onclick="toggleAnswer(29)">정답 확인</button>
+            <div class="answer-content" id="answer-29">
+                <strong>정답: CRP (C-reactive protein)</strong>
+            </div>
+        </div>
+        <div class="question">
+            <p>30. [단답형] 용액 속 입자에 빛을 쪼였을 때 발생하는 산란광(scattered light)을 측정하여 항원-항체 복합체 등을 정량하는 검사 원리는 무엇인가?</p>
+            <button class="show-answer-btn" onclick="toggleAnswer(30)">정답 확인</button>
+            <div class="answer-content" id="answer-30">
+                <strong>정답: Nephelometry (비탁법)</strong>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleAnswer(questionNumber) {
+            var answerDiv = document.getElementById('answer-' + questionNumber);
+            var button = event.target;
+
+            if (answerDiv.style.display === 'none' || answerDiv.style.display === '') {
+                answerDiv.style.display = 'block';
+                button.textContent = '정답 숨기기';
+            } else {
+                answerDiv.style.display = 'none';
+                button.textContent = '정답 확인';
+            }
+        }
+    </script>
+
+</body>
+</html>
