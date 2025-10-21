@@ -1,0 +1,457 @@
+import React, { useState } from ‘react’;
+import { BookOpen, Brain, CheckCircle, XCircle, Award, ChevronDown, ChevronUp } from ‘lucide-react’;
+
+const MicrobiologyStudy = () => {
+const [activeTab, setActiveTab] = useState(‘summary’);
+const [quizAnswers, setQuizAnswers] = useState({});
+const [showResults, setShowResults] = useState(false);
+const [expandedSections, setExpandedSections] = useState({});
+
+const toggleSection = (section) => {
+setExpandedSections(prev => ({
+…prev,
+[section]: !prev[section]
+}));
+};
+
+const summaryData = [
+{
+title: “1. 그람염색”,
+key: “gram”,
+content: [
+{ label: “시약 순서”, value: “Crystal violet (1분) → Gram iodine (1분) → Acetone-alcohol (2-3초) → Safranin O (30초)” },
+{ label: “양성균”, value: “보라색 - 알균(chains/clusters/pairs), 막대균(large/filamentous)” },
+{ label: “음성균”, value: “분홍색 - 알균, 막대균(pleomorphic/filamentous)” },
+{ label: “핵심 포인트”, value: “탈색 시간(2-3초)이 매우 중요! 너무 오래하면 양성균도 음성으로 보임” }
+]
+},
+{
+title: “2. 배지의 종류”,
+key: “media”,
+content: [
+{ label: “혈액한천배지”, value: “비선택배지, 용혈 관찰 (α: 불완전/녹색, β: 완전/투명, γ: 무용혈)” },
+{ label: “MacConkey”, value: “그람음성균 선택배지, Lactose 발효: 분홍색(+), 무색(-)” },
+{ label: “Thioglycollate”, value: “무산소성균 액체배지, 산화환원 지시약으로 산소 확인” },
+{ label: “수송배지”, value: “Amies, Stuart, Cary-Blair - 균 생존 유지 목적” }
+]
+},
+{
+title: “3. 검체 채취 핵심”,
+key: “specimen”,
+content: [
+{ label: “혈액”, value: “20mL 채혈 → 산소성/무산소성 병에 각 10mL, 70% 알코올→포비돈 요오드 소독” },
+{ label: “뇌척수액”, value: “최소 2mL (10mL 최적), 냉장보관 금지! 응급검사” },
+{ label: “객담”, value: “아침 기상 후 양치→깊은 기침, 그람염색으로 질 평가” },
+{ label: “소변”, value: “중간뇨 채취, 2시간 내 검사 또는 냉장보관” },
+{ label: “대변”, value: “Shigella: rectal swab, Salmonella: 대변 1-2gm” }
+]
+},
+{
+title: “4. 항균제감수성검사”,
+key: “ast”,
+content: [
+{ label: “디스크 확산법”, value: “McFarland 0.5 (10⁸/mL) → Mueller-Hinton 배지 → 35℃ 16-18시간” },
+{ label: “결과 판정”, value: “억제대 지름 측정 → CLSI/EUCAST 기준표와 비교” },
+{ label: “희석법”, value: “MIC(최소억제농도), MBC(최소살균농도) 측정 가능” },
+{ label: “주의사항”, value: “CO₂ 배양기 사용 금지!” }
+]
+},
+{
+title: “5. 결핵균검사”,
+key: “tb”,
+content: [
+{ label: “전처리”, value: “4% NaOH 동량 혼합(1시간 이내!) → 원심분리 → 도말/배양” },
+{ label: “AFB 염색”, value: “Carbol fuchsin 가열 5분 → 3% HCl-alcohol 탈색 → Methylene blue 대조염색” },
+{ label: “양성 색”, value: “붉은색(빨간 막대균)” },
+{ label: “배양”, value: “Ogawa, L-J 고체배지 또는 MGIT 액체배지, 6-8주 소요” }
+]
+},
+{
+title: “6. 진균검사”,
+key: “fungus”,
+content: [
+{ label: “KOH mount”, value: “10% KOH → yeast/hyphae 관찰 (200-400배)” },
+{ label: “India ink”, value: “Cryptococcus capsule 관찰용, 뇌척수액 검사” },
+{ label: “Yeast 배지”, value: “SDA + Chloramphenicol, 자동화장비로 동정” },
+{ label: “Mold 배지”, value: “SDA + CM + Cycloheximide, LPCB 염색으로 동정” }
+]
+},
+{
+title: “7. 무산소성균 배양”,
+key: “anaerobe”,
+content: [
+{ label: “배양 조건”, value: “Anaerobic jar/chamber, 85% N₂ + 10% H₂ + 5% CO₂” },
+{ label: “배양 기간”, value: “48시간” },
+{ label: “주요 균”, value: “Bacteroides, Clostridium, Peptostreptococcus” },
+{ label: “검체 채취”, value: “주사기로 공기 배제, 즉시 검사실 이송” }
+]
+}
+];
+
+const quizData = [
+{
+question: “그람염색에서 acetone-alcohol 탈색 시간은?”,
+options: [“30초”, “1분”, “2-3초”, “5분”],
+correct: 2,
+explanation: “2-3초가 정답입니다. 탈색 시간이 너무 길면 그람양성균도 탈색되어 그람음성균으로 오인될 수 있습니다.”
+},
+{
+question: “MacConkey 배지에서 lactose 발효균의 집락 색은?”,
+options: [“무색”, “분홍색”, “녹색”, “노란색”],
+correct: 1,
+explanation: “분홍색이 정답입니다. Lactose 발효로 산이 생성되어 neutral red 지시약과 반응하여 분홍색을 띱니다.”
+},
+{
+question: “혈액배양 시 1회 채혈량과 각 배양병에 넣는 양은?”,
+options: [“10mL 총, 각 5mL”, “20mL 총, 각 10mL”, “30mL 총, 각 15mL”, “40mL 총, 각 20mL”],
+correct: 1,
+explanation: “20mL 총, 각 10mL가 정답입니다. 산소성과 무산소성 배양병 각각에 10mL씩 접종합니다.”
+},
+{
+question: “뇌척수액 검체를 냉장보관하지 않는 이유는?”,
+options: [“균이 더 잘 자라서”, “온도에 민감한 균(N. meningitidis 등)이 죽을 수 있어서”, “검체가 응고되어서”, “오염 위험이 높아서”],
+correct: 1,
+explanation: “온도에 민감한 균(특히 Neisseria meningitidis)이 죽을 수 있기 때문입니다. 뇌척수액은 응급검사로 즉시 처리해야 합니다.”
+},
+{
+question: “항균제감수성 디스크 확산법에서 균 부유액의 McFarland 혼탁도는?”,
+options: [“0.1”, “0.5”, “1.0”, “2.0”],
+correct: 1,
+explanation: “0.5가 정답입니다. 이때 균수는 대략 10⁸/mL입니다.”
+},
+{
+question: “결핵균 검체 전처리에 사용하는 NaOH의 농도와 최대 처리 시간은?”,
+options: [“2% NaOH, 30분”, “4% NaOH, 1시간”, “6% NaOH, 2시간”, “10% NaOH, 30분”],
+correct: 1,
+explanation: “4% NaOH, 1시간이 정답입니다. 1시간을 초과하면 결핵균이 사멸할 수 있습니다.”
+},
+{
+question: “AFB 염색 후 양성 결과의 색은?”,
+options: [“파란색”, “녹색”, “붉은색”, “보라색”],
+correct: 2,
+explanation: “붉은색이 정답입니다. Carbol fuchsin이 mycolic acid에 결합하여 탈색되지 않고 붉은색을 유지합니다.”
+},
+{
+question: “무산소성균 배양 시 anaerobic chamber의 가스 조성은?”,
+options: [“80% N₂, 15% H₂, 5% CO₂”, “85% N₂, 10% H₂, 5% CO₂”, “90% N₂, 5% H₂, 5% CO₂”, “95% N₂, 3% H₂, 2% CO₂”],
+correct: 1,
+explanation: “85% N₂, 10% H₂, 5% CO₂가 정답입니다.”
+},
+{
+question: “진균 중 Cryptococcus 관찰에 사용하는 염색법은?”,
+options: [“KOH mount”, “India ink mount”, “Gram stain”, “AFB stain”],
+correct: 1,
+explanation: “India ink mount가 정답입니다. Cryptococcus의 특징적인 capsule을 관찰할 수 있습니다.”
+},
+{
+question: “혈액한천배지에서 완전 용혈을 나타내는 것은?”,
+options: [“α 용혈”, “β 용혈”, “γ 용혈”, “δ 용혈”],
+correct: 1,
+explanation: “β 용혈이 정답입니다. 집락 주위에 투명한 clear zone이 형성됩니다.”
+}
+];
+
+const keyPoints = [
+{
+category: “검체 채취 금기사항”,
+points: [
+“뇌척수액, N. meningitidis/gonorrhoeae 의심 검체: 냉장보관 금지”,
+“무산소성균 검체: 공기 노출 금지”,
+“결핵균 NaOH 처리: 1시간 초과 금지”,
+“모든 검체: 항균제 투여 후 채취 지양”
+]
+},
+{
+category: “시간이 중요한 검사”,
+points: [
+“그람염색 탈색: 2-3초 (정확한 시간 엄수)”,
+“뇌척수액: 즉시 검사 (응급)”,
+“소변: 2시간 내 검사 또는 냉장보관”,
+“결핵균 NaOH 처리→배양: 1시간 이내”
+]
+},
+{
+category: “농도/수치 암기”,
+points: [
+“McFarland 0.5 = 10⁸ CFU/mL”,
+“혈액배양: 20mL 총 (각 10mL)”,
+“뇌척수액: 최소 2mL (최적 10mL)”,
+“무산소성 chamber: 85% N₂, 10% H₂, 5% CO₂”
+]
+},
+{
+category: “색으로 구분하기”,
+points: [
+“그람양성: 보라색, 그람음성: 분홍색”,
+“MacConkey lactose(+): 분홍색, (-): 무색”,
+“AFB 양성: 붉은색”,
+“α용혈: 녹색, β용혈: 투명, γ용혈: 변화없음”
+]
+}
+];
+
+const handleQuizAnswer = (questionIndex, answerIndex) => {
+setQuizAnswers(prev => ({
+…prev,
+[questionIndex]: answerIndex
+}));
+};
+
+const calculateScore = () => {
+let correct = 0;
+quizData.forEach((q, index) => {
+if (quizAnswers[index] === q.correct) correct++;
+});
+return correct;
+};
+
+const submitQuiz = () => {
+setShowResults(true);
+};
+
+const resetQuiz = () => {
+setQuizAnswers({});
+setShowResults(false);
+};
+
+return (
+<div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+<div className="max-w-6xl mx-auto p-6">
+{/* Header */}
+<div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl shadow-2xl p-8 mb-8 text-white">
+<h1 className="text-4xl font-bold mb-2 flex items-center gap-3">
+<BookOpen size={40} />
+임상미생물학 스터디 가이드
+</h1>
+<p className="text-indigo-100 text-lg">완벽한 시험 준비를 위한 요약 + 퀴즈</p>
+</div>
+
+```
+    {/* Tab Navigation */}
+    <div className="flex gap-4 mb-6 flex-wrap">
+      <button
+        onClick={() => setActiveTab('summary')}
+        className={`px-6 py-3 rounded-xl font-semibold transition-all ${
+          activeTab === 'summary'
+            ? 'bg-indigo-600 text-white shadow-lg scale-105'
+            : 'bg-white text-gray-700 hover:bg-indigo-50'
+        }`}
+      >
+        📚 핵심 요약
+      </button>
+      <button
+        onClick={() => setActiveTab('keypoints')}
+        className={`px-6 py-3 rounded-xl font-semibold transition-all ${
+          activeTab === 'keypoints'
+            ? 'bg-indigo-600 text-white shadow-lg scale-105'
+            : 'bg-white text-gray-700 hover:bg-indigo-50'
+        }`}
+      >
+        ⭐ 암기 포인트
+      </button>
+      <button
+        onClick={() => setActiveTab('quiz')}
+        className={`px-6 py-3 rounded-xl font-semibold transition-all ${
+          activeTab === 'quiz'
+            ? 'bg-indigo-600 text-white shadow-lg scale-105'
+            : 'bg-white text-gray-700 hover:bg-indigo-50'
+        }`}
+      >
+        🎯 중간 퀴즈
+      </button>
+    </div>
+
+    {/* Summary Tab */}
+    {activeTab === 'summary' && (
+      <div className="space-y-4">
+        {summaryData.map((section) => (
+          <div key={section.key} className="bg-white rounded-xl shadow-lg overflow-hidden">
+            <button
+              onClick={() => toggleSection(section.key)}
+              className="w-full p-6 flex items-center justify-between hover:bg-gray-50 transition-colors"
+            >
+              <h2 className="text-2xl font-bold text-indigo-700">{section.title}</h2>
+              {expandedSections[section.key] ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
+            </button>
+            
+            {expandedSections[section.key] && (
+              <div className="p-6 pt-0 space-y-4">
+                {section.content.map((item, idx) => (
+                  <div key={idx} className="border-l-4 border-indigo-500 pl-4 py-2 bg-indigo-50 rounded-r-lg">
+                    <div className="font-semibold text-indigo-900 mb-1">{item.label}</div>
+                    <div className="text-gray-700">{item.value}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    )}
+
+    {/* Key Points Tab */}
+    {activeTab === 'keypoints' && (
+      <div className="grid md:grid-cols-2 gap-6">
+        {keyPoints.map((section, idx) => (
+          <div key={idx} className="bg-white rounded-xl shadow-lg p-6">
+            <h3 className="text-xl font-bold text-purple-700 mb-4 flex items-center gap-2">
+              <Brain size={24} />
+              {section.category}
+            </h3>
+            <ul className="space-y-3">
+              {section.points.map((point, pidx) => (
+                <li key={pidx} className="flex items-start gap-3">
+                  <span className="text-purple-500 font-bold mt-1">✓</span>
+                  <span className="text-gray-700">{point}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+        
+        {/* Quick Reference Card */}
+        <div className="md:col-span-2 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl shadow-lg p-6 border-2 border-yellow-300">
+          <h3 className="text-xl font-bold text-orange-700 mb-4">⚡ 시험 직전 체크리스트</h3>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div>
+              <h4 className="font-bold text-orange-600 mb-2">그람염색</h4>
+              <p className="text-sm">CV → GI → A-A (2-3초!) → Safranin</p>
+            </div>
+            <div>
+              <h4 className="font-bold text-orange-600 mb-2">혈액배양</h4>
+              <p className="text-sm">20mL → 각 10mL (산소성/무산소성)</p>
+            </div>
+            <div>
+              <h4 className="font-bold text-orange-600 mb-2">결핵</h4>
+              <p className="text-sm">4% NaOH (1시간 이내!) → 붉은색</p>
+            </div>
+            <div>
+              <h4 className="font-bold text-orange-600 mb-2">AST</h4>
+              <p className="text-sm">McFarland 0.5 = 10⁸/mL</p>
+            </div>
+            <div>
+              <h4 className="font-bold text-orange-600 mb-2">냉장금지</h4>
+              <p className="text-sm">CSF, Neisseria 의심 검체</p>
+            </div>
+            <div>
+              <h4 className="font-bold text-orange-600 mb-2">무산소성</h4>
+              <p className="text-sm">85% N₂, 10% H₂, 5% CO₂</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+
+    {/* Quiz Tab */}
+    {activeTab === 'quiz' && (
+      <div className="space-y-6">
+        {!showResults ? (
+          <>
+            {quizData.map((q, qIndex) => (
+              <div key={qIndex} className="bg-white rounded-xl shadow-lg p-6">
+                <h3 className="text-lg font-bold text-gray-800 mb-4">
+                  Q{qIndex + 1}. {q.question}
+                </h3>
+                <div className="space-y-3">
+                  {q.options.map((option, oIndex) => (
+                    <button
+                      key={oIndex}
+                      onClick={() => handleQuizAnswer(qIndex, oIndex)}
+                      className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
+                        quizAnswers[qIndex] === oIndex
+                          ? 'border-indigo-500 bg-indigo-50'
+                          : 'border-gray-200 hover:border-indigo-300 hover:bg-gray-50'
+                      }`}
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+            
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={submitQuiz}
+                disabled={Object.keys(quizAnswers).length !== quizData.length}
+                className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                채점하기
+              </button>
+            </div>
+          </>
+        ) : (
+          <div className="space-y-6">
+            {/* Score Card */}
+            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl shadow-2xl p-8 text-white text-center">
+              <Award size={64} className="mx-auto mb-4" />
+              <h2 className="text-3xl font-bold mb-2">점수</h2>
+              <p className="text-5xl font-bold mb-4">
+                {calculateScore()} / {quizData.length}
+              </p>
+              <p className="text-xl">
+                {calculateScore() === quizData.length
+                  ? '🎉 완벽합니다!'
+                  : calculateScore() >= quizData.length * 0.7
+                  ? '👍 잘하셨습니다!'
+                  : '💪 조금만 더 복습해보세요!'}
+              </p>
+            </div>
+
+            {/* Detailed Results */}
+            {quizData.map((q, qIndex) => {
+              const isCorrect = quizAnswers[qIndex] === q.correct;
+              return (
+                <div
+                  key={qIndex}
+                  className={`rounded-xl shadow-lg p-6 ${
+                    isCorrect ? 'bg-green-50 border-2 border-green-500' : 'bg-red-50 border-2 border-red-500'
+                  }`}
+                >
+                  <div className="flex items-start gap-3 mb-3">
+                    {isCorrect ? (
+                      <CheckCircle className="text-green-600 flex-shrink-0" size={24} />
+                    ) : (
+                      <XCircle className="text-red-600 flex-shrink-0" size={24} />
+                    )}
+                    <div className="flex-1">
+                      <h3 className="font-bold text-gray-800 mb-2">
+                        Q{qIndex + 1}. {q.question}
+                      </h3>
+                      <p className="text-sm text-gray-600 mb-2">
+                        <span className="font-semibold">내 답:</span> {q.options[quizAnswers[qIndex]]}
+                      </p>
+                      {!isCorrect && (
+                        <p className="text-sm text-gray-600 mb-2">
+                          <span className="font-semibold">정답:</span> {q.options[q.correct]}
+                        </p>
+                      )}
+                      <p className="text-sm text-gray-700 bg-white p-3 rounded-lg mt-3">
+                        <span className="font-semibold">💡 해설:</span> {q.explanation}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+
+            <div className="flex justify-center">
+              <button
+                onClick={resetQuiz}
+                className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all"
+              >
+                다시 풀기
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    )}
+  </div>
+</div>
+```
+
+);
+};
+
+export default MicrobiologyStudy;
