@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>임상미생물학 스터디 가이드</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    body {
+        font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        line-height: 1.6;
+        background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 50%, #fce7f3 100%);
+        min-height: 100vh;
+    }
+    
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    header {
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        border-radius: 20px;
+        padding: 40px;
+        color: white;
+        margin-bottom: 30px;
+        box-shadow: 0 20px 60px rgba(79, 70, 229, 0.3);
+    }
+    
+    header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+    }
+    
+    header p {
+        font-size: 1.2em;
+        opacity: 0.9;
+    }
+    
+    .tabs {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+    }
+    
+    .tab-button {
+        padding: 15px 30px;
+        border: none;
+        border-radius: 12px;
+        font-size: 1em;
+        font-weight: 600;
+        cursor: pointer;
+        background: white;
+        color: #374151;
+        transition: all 0.3s;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .tab-button:hover {
+        background: #eef2ff;
+        transform: translateY(-2px);
+    }
+    
+    .tab-button.active {
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        color: white;
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(79, 70, 229, 0.4);
+    }
+    
+    .tab-content {
+        display: none;
+    }
+    
+    .tab-content.active {
+        display: block;
+        animation: fadeIn 0.5s;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .summary-section {
+        background: white;
+        border-radius: 15px;
+        margin-bottom: 20px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .summary-header {
+        padding: 25px;
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        color: white;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s;
+    }
+    
+    .summary-header:hover {
+        background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+    }
+    
+    .summary-header h2 {
+        font-size: 1.5em;
+    }
+    
+    .summary-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease;
+    }
+    
+    .summary-content.expanded {
+        max-height: 2000px;
+    }
+    
+    .summary-inner {
+        padding: 25px;
+    }
+    
+    .summary-item {
+        border-left: 4px solid #4f46e5;
+        background: #eef2ff;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 0 8px 8px 0;
+    }
+    
+    .summary-item-label {
+        font-weight: 700;
+        color: #312e81;
+        margin-bottom: 5px;
+    }
+    
+    .summary-item-value {
+        color: #374151;
+    }
+    
+    .keypoints-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+    }
+    
+    .keypoint-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .keypoint-card h3 {
+        color: #7c3aed;
+        font-size: 1.3em;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #7c3aed;
+    }
+    
+    .keypoint-card ul {
+        list-style: none;
+    }
+    
+    .keypoint-card li {
+        padding: 10px 0;
+        padding-left: 30px;
+        position: relative;
+    }
+    
+    .keypoint-card li:before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #7c3aed;
+        font-weight: bold;
+        font-size: 1.2em;
+    }
+    
+    .quick-reference {
+        grid-column: 1 / -1;
+        background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+        border: 3px solid #f59e0b;
+        padding: 30px;
+        border-radius: 15px;
+        margin-top: 20px;
+    }
+    
+    .quick-reference h3 {
+        color: #92400e;
+        font-size: 1.5em;
+        margin-bottom: 20px;
+    }
+    
+    .quick-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+    }
+    
+    .quick-item h4 {
+        color: #ea580c;
+        margin-bottom: 5px;
+        font-size: 1em;
+    }
+    
+    .quick-item p {
+        color: #78350f;
+        font-size: 0.9em;
+    }
+    
+    .quiz-question {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .quiz-question h3 {
+        color: #374151;
+        font-size: 1.2em;
+        margin-bottom: 20px;
+    }
+    
+    .quiz-option {
+        padding: 15px 20px;
+        margin: 10px 0;
+        border: 2px solid #e5e7eb;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s;
+        background: white;
+    }
+    
+    .quiz-option:hover {
+        border-color: #4f46e5;
+        background: #eef2ff;
+        transform: translateX(5px);
+    }
+    
+    .quiz-option.selected {
+        border-color: #4f46e5;
+        background: #eef2ff;
+    }
+    
+    .quiz-option.correct {
+        border-color: #10b981;
+        background: #d1fae5;
+    }
+    
+    .quiz-option.incorrect {
+        border-color: #ef4444;
+        background: #fee2e2;
+    }
+    
+    .quiz-explanation {
+        margin-top: 15px;
+        padding: 15px;
+        background: #f3f4f6;
+        border-radius: 8px;
+        border-left: 4px solid #6366f1;
+    }
+    
+    .quiz-buttons {
+        text-align: center;
+        margin: 30px 0;
+    }
+    
+    .btn {
+        padding: 15px 40px;
+        border: none;
+        border-radius: 12px;
+        font-size: 1.1em;
+        font-weight: 600;
+        cursor: pointer;
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        color: white;
+        box-shadow: 0 5px 20px rgba(79, 70, 229, 0.3);
+        transition: all 0.3s;
+    }
+    
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
+    }
+    
+    .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    
+    .score-card {
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        border-radius: 20px;
+        padding: 50px;
+        text-align: center;
+        color: white;
+        margin-bottom: 30px;
+        box-shadow: 0 20px 60px rgba(79, 70, 229, 0.3);
+    }
+    
+    .score-card h2 {
+        font-size: 2em;
+        margin-bottom: 10px;
+    }
+    
+    .score-card .score {
+        font-size: 4em;
+        font-weight: bold;
+        margin: 20px 0;
+    }
+    
+    .score-card .message {
+        font-size: 1.5em;
+    }
+    
+    .result-item {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .result-item.correct {
+        border-left: 5px solid #10b981;
+    }
+    
+    .result-item.incorrect {
+        border-left: 5px solid #ef4444;
+    }
+    
+    .result-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .result-icon {
+        font-size: 1.5em;
+        flex-shrink: 0;
+    }
+    
+    .result-content {
+        flex: 1;
+    }
+    
+    .result-content h3 {
+        color: #374151;
+        margin-bottom: 10px;
+    }
+    
+    .result-answer {
+        margin: 5px 0;
+        padding: 8px 12px;
+        background: #f3f4f6;
+        border-radius: 6px;
+        font-size: 0.95em;
+    }
+    
+    .result-explanation {
+        margin-top: 15px;
+        padding: 15px;
+        background: #f9fafb;
+        border-radius: 8px;
+        border-left: 4px solid #6366f1;
+    }
+    
+    @media (max-width: 768px) {
+        header h1 {
+            font-size: 1.8em;
+        }
+        
+        .tabs {
+            flex-direction: column;
+        }
+        
+        .tab-button {
+            width: 100%;
+        }
+        
+        .keypoints-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .quick-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 임상미생물학 스터디 가이드</h1>
+            <p>완벽한 시험 준비를 위한 요약 + 퀴즈</p>
+        </header>
+
+```
+    <div class="tabs">
+        <button class="tab-button active" onclick="showTab('summary')">📚 핵심 요약</button>
+        <button class="tab-button" onclick="showTab('keypoints')">⭐ 암기 포인트</button>
+        <button class="tab-button" onclick="showTab('quiz')">🎯 중간 퀴즈</button>
+    </div>
+    
+    <!-- Summary Tab -->
+    <div id="summary" class="tab-content active">
+        <div class="summary-section">
+            <div class="summary-header" onclick="toggleSection(0)">
+                <h2>1. 그람염색</h2>
+                <span id="arrow-0">▼</span>
+            </div>
+            <div class="summary-content" id="content-0">
+                <div class="summary-inner">
+                    <div class="summary-item">
+                        <div class="summary-item-label">시약 순서</div>
+                        <div class="summary-item-value">Crystal violet (1분) → Gram iodine (1분) → Acetone-alcohol (2-3초) → Safranin O (30초)</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-item-label">양성균</div>
+                        <div class="summary-item-value">보라색 - 알균(chains/clusters/pairs), 막대균(large/filamentous)</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-item-label">음성균</div>
+                        <div class="summary-item-value">분홍색 - 알균, 막대균(pleomorphic/filamentous)</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-item-label">핵심 포인트</div>
+                        <div class="summary-item-value">탈색 시간(2-3초)이 매우 중요! 너무 오래하면 양성균도 음성으로 보임</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="summary-section">
+            <div class="summary-header" onclick="toggleSection(1)">
+                <h2>2. 배지의 종류</h2>
+                <span id="arrow-1">▼</span>
+            </div>
+            <div class="summary-content" id="content-1">
+                <div class="summary-inner">
+                    <div class="summary-item">
+                        <div class="summary-item-label">혈액한천배지</div>
+                        <div class="summary-item-value">비선택배지, 용혈 관찰 (α: 불완전/녹색, β: 완전/투명, γ: 무용혈)</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-item-label">MacConkey</div>
+                        <div class="summary-item-value">그람음성균 선택배지, Lactose 발효: 분홍색(+), 무색(-)</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-item-label">Thioglycollate</div>
+                        <div class="summary-item-value">무산소성균 액체배지, 산화환원 지시약으로 산소 확인</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-item-label">수송배지</div>
+                        <div class="summary-item-value">Amies, Stuart, Cary-Blair - 균 생존 유지 목적</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="summary-section">
+            <div class="summary-header" onclick="toggleSection(2)">
+                <h2>3. 검체 채취 핵심</h2>
+                <span id="arrow-2">▼</span>
+            </div>
+            <div class="summary-content" id="content-2">
+                <div class="summary-inner">
+                    <div class="summary-item">
+                        <div class="summary-item-label">혈액</div>
+                        <div class="summary-item-value">20mL 채혈 → 산소성/무산소성 병에 각 10mL, 70% 알코올→포비돈 요오드 소독</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-item-label">뇌척수액</div>
+                        <div class="summary-item-value">최소 2mL (10mL 최적), 냉장보관 금지! 응급검사</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-item-label">객담</div>
+                        <div class="summary-item-value">아침 기상 후 양치→깊은 기침, 그람염색으로 질 평가</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-item-label">소변</div>
+                        <div class="summary-item-value">중간뇨 채취, 2시간 내 검사 또는 냉장보관</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-item-label">대변</div>
+                        <div class="summary-item-value">Shigella: rectal swab, Salmonella: 대변 1-2gm</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="summary-section">
+            <div class="summary-header" onclick="toggleSection(3)">
+                <h2>4. 항균제감수성검사</h2>
+                <span id="arrow-3">▼</span>
+            </div>
+            <div class="summary-content" id="content-3">
+                <div class="summary-inner">
+                    <div class="summary-item">
+                        <div class="summary-item-label">디스크 확산법</div>
+                        <div class="summary-item-value">McFarland 0.5 (10⁸/mL) → Mueller-Hinton 배지 → 35℃ 16-18시간</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-item-label">결과 판정</div>
+                        <div class="summary-item-value">억제대 지름 측정 → CLSI/EUCAST 기준표와 비교</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-item-label">희석법</div>
+                        <div class="summary-item-value">MIC(최소억제농도), MBC(최소살균농도) 측정 가능</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-item-label">주의사항</div>
+                        <div class="summary-item-value">CO₂ 배양기 사용 금지!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="summary-section">
+            <div class="summary-header" onclick="toggleSection(4)">
+                <h2>5. 결핵균검사</h2>
+                <span id="arrow-4">▼</span>
+            </div>
+            <div class="summary-content" id="content-4">
+                <div class="summary-inner">
+                    <div class="summary-item">
+                        <div class="summary-item-label">전처리</div>
+                        <div class="summary-item-value">4% NaOH 동량 혼합(1시간 이내!) → 원심분리 → 도말/배양</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-item-label">AFB 염색</div>
+                        <div class="summary-item-value">Carbol fuchsin 가열 5분 → 3% HCl-alcohol 탈색 → Methylene blue 대조염색</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-item-label">양성 색</div>
+                        <div class="summary-item-value">붉은색(빨간 막대균)</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-item-label">배양</div>
+                        <div class="summary-item-value">Ogawa, L-J 고체배지 또는 MGIT 액체배지, 6-8주 소요</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="summary-section">
+            <div class="summary-header" onclick="toggleSection(5)">
+                <h2>6. 진균검사</h2>
+                <span id="arrow-5">▼</span>
+            </div>
+            <div class="summary-content" id="content-5">
+                <div class="summary-inner">
+                    <div class="summary-item">
+                        <div class="summary-item-label">KOH mount</div>
+                        <div class="summary-item-value">10% KOH → yeast/hyphae 관찰 (200-400배)</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-item-label">India ink</div>
+                        <div class="summary-item-value">Cryptococcus capsule 관찰용, 뇌척수액 검사</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-item-label">Yeast 배지</div>
+                        <div class="summary-item-value">SDA + Chloramphenicol, 자동화장비로 동정</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-item-label">Mold 배지</div>
+                        <div class="summary-item-value">SDA + CM + Cycloheximide, LPCB 염색으로 동정</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="summary-section">
+            <div class="summary-header" onclick="toggleSection(6)">
+                <h2>7. 무산소성균 배양</h2>
+                <span id="arrow-6">▼</span>
+            </div>
+            <div class="summary-content" id="content-6">
+                <div class="summary-inner">
+                    <div class="summary-item">
+                        <div class="summary-item-label">배양 조건</div>
+                        <div class="summary-item-value">Anaerobic jar/chamber, 85% N₂ + 10% H₂ + 5% CO₂</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-item-label">배양 기간</div>
+                        <div class="summary-item-value">48시간</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-item-label">주요 균</div>
+                        <div class="summary-item-value">Bacteroides, Clostridium, Peptostreptococcus</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-item-label">검체 채취</div>
+                        <div class="summary-item-value">주사기로 공기 배제, 즉시 검사실 이송</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Key Points Tab -->
+    <div id="keypoints" class="tab-content">
+        <div class="keypoints-grid">
+            <div class="keypoint-card">
+                <h3>🚫 검체 채취 금기사항</h3>
+                <ul>
+                    <li>뇌척수액, N. meningitidis/gonorrhoeae 의심 검체: 냉장보관 금지</li>
+                    <li>무산소성균 검체: 공기 노출 금지</li>
+                    <li>결핵균 NaOH 처리: 1시간 초과 금지</li>
+                    <li>모든 검체: 항균제 투여 후 채취 지양</li>
+                </ul>
+            </div>
+            
+            <div class="keypoint-card">
+                <h3>⏰ 시간이 중요한 검사</h3>
+                <ul>
+                    <li>그람염색 탈색: 2-3초 (정확한 시간 엄수)</li>
+                    <li>뇌척수액: 즉시 검사 (응급)</li>
+                    <li>소변: 2시간 내 검사 또는 냉장보관</li>
+                    <li>결핵균 NaOH 처리→배양: 1시간 이내</li>
+                </ul>
+            </div>
+            
+            <div class="keypoint-card">
+                <h3>🔢 농도/수치 암기</h3>
+                <ul>
+                    <li>McFarland 0.5 = 10⁸ CFU/mL</li>
+                    <li>혈액배양: 20mL 총 (각 10mL)</li>
+                    <li>뇌척수액: 최소 2mL (최적 10mL)</li>
+                    <li>무산소성 chamber: 85% N₂, 10% H₂, 5% CO₂</li>
+                </ul>
+            </div>
+            
+            <div class="keypoint-card">
+                <h3>🎨 색으로 구분하기</h3>
+                <ul>
+                    <li>그람양성: 보라색, 그람음성: 분홍색</li>
+                    <li>MacConkey lactose(+): 분홍색, (-): 무색</li>
+                    <li>AFB 양성: 붉은색</li>
+                    <li>α용혈: 녹색, β용혈: 투명, γ용혈: 변화없음</li>
+                </ul>
+            </div>
+            
+            <div class="quick-reference">
+                <h3>⚡ 시험 직전 체크리스트</h3>
+                <div class="quick-grid">
+                    <div class="quick-item">
+                        <h4>그람염색</h4>
+                        <p>CV → GI → A-A (2-3초!) → Safranin</p>
+                    </div>
+                    <div class="quick-item">
+                        <h4>혈액배양</h4>
+                        <p>20mL → 각 10mL (산소성/무산소성)</p>
+                    </div>
+                    <div class="quick-item">
+                        <h4>결핵</h4>
+                        <p>4% NaOH (1시간 이내!) → 붉은색</p>
+                    </div>
+                    <div class="quick-item">
+                        <h4>AST</h4>
+                        <p>McFarland 0.5 = 10⁸/mL</p>
+                    </div>
+                    <div class="quick-item">
+                        <h4>냉장금지</h4>
+                        <p>CSF, Neisseria 의심 검체</p>
+                    </div>
+                    <div class="quick-item">
+                        <h4>무산소성</h4>
+                        <p>85% N₂, 10% H₂, 5% CO₂</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quiz Tab -->
+    <div id="quiz" class="tab-content">
+        <div id="quiz-questions"></div>
+        <div class="quiz-buttons">
+            <button id="submit-quiz" class="btn" onclick="submitQuiz()">채점하기</button>
+        </div>
+        <div id="quiz-results"></div>
+    </div>
+</div>
+
+<script>
+    // Quiz Data
+    const quizData = [
+        {
+            question: "그람염색에서 acetone-alcohol 탈색 시간은?",
+            options: ["30초", "1분", "2-3초", "5분"],
+            correct: 2,
+            explanation: "2-3초가 정답입니다. 탈색 시간이 너무 길면 그람양성균도 탈색되어 그람음성균으로 오인될 수 있습니다."
+        },
+        {
+            question: "MacConkey 배지에서 lactose 발효균의 집락 색은?",
+            options: ["무색", "분홍색", "녹색", "노란색"],
+            correct: 1,
+            explanation: "
+```
