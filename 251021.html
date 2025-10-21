@@ -1,4 +1,508 @@
-법(agar dilution)</strong></li>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>임상미생물학 실습</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.8;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin: 40px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        h3 {
+            color: #764ba2;
+            font-size: 1.4em;
+            margin: 30px 0 15px 0;
+            padding-left: 15px;
+            border-left: 4px solid #764ba2;
+        }
+        
+        h4 {
+            color: #555;
+            font-size: 1.2em;
+            margin: 20px 0 10px 0;
+            font-weight: 600;
+        }
+        
+        .objectives {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .objectives h2 {
+            color: white;
+            border-bottom: 3px solid white;
+        }
+        
+        .objectives ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .objectives li {
+            padding: 10px 0 10px 30px;
+            position: relative;
+        }
+        
+        .objectives li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            font-size: 1.3em;
+        }
+        
+        .section {
+            background: #f8f9fa;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+        
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .note {
+            background: #d1ecf1;
+            padding: 15px;
+            border-left: 4px solid #17a2b8;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .warning {
+            background: #f8d7da;
+            padding: 15px;
+            border-left: 4px solid #dc3545;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .method-step {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .result-box {
+            background: #e7f3ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        strong {
+            color: #667eea;
+        }
+        
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔬 임상미생물학</h1>
+            <p>Clinical Microbiology Laboratory Practice</p>
+        </header>
+        
+        <div class="content">
+            <div class="section">
+                <h2>■ 실습내용</h2>
+                <ul>
+                    <li>검체별 채취, 운송 및 접종 방법</li>
+                    <li>세균의 <strong>배양</strong>과 <strong>동정</strong>법</li>
+                    <li>항균제감수성검사와 항균제내성검사</li>
+                    <li>진균, 바이러스 및 기생충검사법</li>
+                    <li>의료관련감염 감시와 관리</li>
+                </ul>
+            </div>
+
+            <div class="objectives">
+                <h2>■ 구체적 학습목표</h2>
+                <ul>
+                    <li>배양 결과를 좌우하는 채취와 운송방법을 설명할 수 있어야 한다 (특히, 혈액배양)</li>
+                    <li>그람염색을 할 수 있어야 하고 세균, 백혈구 및 상피세포를 감별할 수 있어야 한다</li>
+                    <li>각종 배지의 특성을 설명할 수 있어야 한다 (특히, 혈액한천배지, MacConkey 배지)</li>
+                    <li>항균제감수성검사법(희석법, 확산법)의 종류와 결과해석을 할 수 있어야 한다</li>
+                    <li>주요 항균제내성검사법의 종류와 결과해석을 할 수 있어야 한다 (예: CRE, VRE, MRSA 등)</li>
+                    <li>진균(yeast, mold)의 종류와 차이점을 설명할 수 있어야 한다</li>
+                </ul>
+            </div>
+
+            <h2>■ 실습</h2>
+
+            <h3>1. 그람염색 → 시약 순서 생각</h3>
+            
+            <h4>1) 방법</h4>
+            <div class="method-step">
+                <ol>
+                    <li>유리슬라이드에 검체번호와 도말부위를 표시한 후 객담을 잘 펴서 바른다</li>
+                    <li>알코올램프에 대워 말린다</li>
+                    <li><strong>Crystal violet 1분</strong> → 수돗물에 세척 → <strong>Gram iodine 1분</strong> → 수돗물에 세척 → <strong>acetone-alcohol 2~3초</strong> → 수돗물에 세척 → <strong>safranin O 30초</strong> → 수돗물에 세척</li>
+                    <li>말린 후 검경한다</li>
+                </ol>
+            </div>
+
+            <h4>2) 결과 판독</h4>
+            <div class="result-box">
+                <ul>
+                    <li><strong>그람양성알균:</strong> in chains, clusters, pairs</li>
+                    <li><strong>그람양성막대균:</strong> large, filamentous, coryneform</li>
+                    <li><strong>그람음성알균</strong></li>
+                    <li><strong>그람음성막대균:</strong> pleomorphic, filamentous</li>
+                </ul>
+            </div>
+
+            <h3>2. 혈액한천배지(blood agar plate) 균 접종 관찰</h3>
+            
+            <h4>1) 성장 세균</h4>
+            <p>대부분의 세균</p>
+
+            <h4>2) 용혈</h4>
+            <div class="result-box">
+                <ul>
+                    <li><strong>α (alpha):</strong> 불완전 용혈, 집락 주위에 greenish discolorization 형성</li>
+                    <li><strong>β (beta):</strong> 완전 용혈, 집락 주위에 clear zone 형성</li>
+                    <li><strong>γ (gamma):</strong> 용혈 없음</li>
+                </ul>
+            </div>
+
+            <h3>3. MacConkey 배지 균 접종 관찰</h3>
+            
+            <h4>1) 성장 세균</h4>
+            <p>그람음성막대균 (bile salt와 crystal violet이 그람양성세균의 성장 억제)</p>
+
+            <h4>2) 색깔</h4>
+            <p>lactose fermentation이 일어나면 pH가 떨어져 neutral red가 분홍색을 띤다</p>
+            <div class="result-box">
+                <ul>
+                    <li><strong>분홍색:</strong> lactose-fermenter</li>
+                    <li><strong>무색:</strong> lactose-nonfermenter</li>
+                </ul>
+            </div>
+
+            <h3>4. 항균제감수성검사(디스크확산법)</h3>
+            
+            <h4>1) 방법</h4>
+            <div class="method-step">
+                <ol>
+                    <li>배지에서 자란 균 집락 4~5개를 액체배지에 풀어 McFarland 혼탁도 0.5에 맞춘다 (이때의 균수는 대략 10⁸/mL)</li>
+                    <li>면봉으로 균 부유액을 적신 후 Mueller-Hinton 배지 표면에 골고루 바른다</li>
+                    <li>항균제 디스크를 Mueller-Hinton 배지 표면에 놓는다</li>
+                    <li>16~18시간, 35℃ (CO₂ 배양기는 안됨)에서 배양한 후 결과 판정한다</li>
+                </ol>
+            </div>
+
+            <h4>2) 결과 판독</h4>
+            <p><strong>감수성(susceptible), 중간(intermediate), 내성(resistant)</strong></p>
+            <ol>
+                <li>억제대 지름을 측정한다</li>
+                <li>각 균주 및 항균제 별 억제대 기준표(CLSI 또는 EUCAST)와 비교하여 판독한다</li>
+            </ol>
+
+            <h2>■ 검체별 배양시 알아야 할 사항</h2>
+
+            <div class="section">
+                <h3>1. 혈액</h3>
+                <ol>
+                    <li>채혈하는 방법, 양, 횟수, 배지 명은?</li>
+                    <li>배양 기간은?</li>
+                    <li>결과는 어떻게 보고하나?</li>
+                </ol>
+            </div>
+
+            <div class="section">
+                <h3>2. 뇌척수액</h3>
+                <ol>
+                    <li>검체를 얻는 방법은?</li>
+                    <li>뇌척수액은 냉장 보관하지 않는다. 이유는?</li>
+                </ol>
+            </div>
+
+            <div class="section">
+                <h3>3. 호흡기</h3>
+                <ol>
+                    <li>객담의 그람염색시 관찰해야 할 것은?</li>
+                    <li>배양에 좋은 객담의 조건은?</li>
+                    <li>객담배양 결과는 어떻게 보고하나?</li>
+                </ol>
+            </div>
+
+            <div class="section">
+                <h3>4. 소변</h3>
+                <ol>
+                    <li>소변배양시 검체는 어떻게 채취하나?</li>
+                    <li>소변배양은 채취 후 몇 시간 내에 해야 하나? 그렇지 못할 경우의 보관 방법은?</li>
+                    <li>결과는 어떻게 보고하나?</li>
+                </ol>
+            </div>
+
+            <div class="section">
+                <h3>5. 대변</h3>
+                <ol>
+                    <li>대변배양에 이용하는 배지 이름은?</li>
+                    <li>결과는 어떻게 보고하나?</li>
+                </ol>
+            </div>
+
+            <div class="section">
+                <h3>6. 무산소성세균</h3>
+                <ol>
+                    <li>무산소성세균 배양을 하지 않는 검체는?</li>
+                    <li>무산소성세균 배양을 위한 검체는 어떻게 채취하나?</li>
+                </ol>
+            </div>
+
+            <div class="section">
+                <h3>7. 결핵균</h3>
+                <ol>
+                    <li>AFB 염색 양성결과의 색은 어떠한 색이며 이 색은 어떠한 성분에 의해서 나타나는가?</li>
+                    <li>결핵균의 배양과 항결핵제감수성검사의 소요 기간은?</li>
+                </ol>
+            </div>
+
+            <h2>■ 일반세균배양검사</h2>
+
+            <h3>1. 배양검사의 장단점</h3>
+
+            <h4>1) 장점</h4>
+            <div class="highlight">
+                <p><strong>높은 검출율</strong></p>
+                <ul>
+                    <li>도말표본: 10⁵/mL 이상에서 관찰 가능</li>
+                    <li>배양: 고형배지 10¹~10²/mL, 증균: 액체배지 10/mL 또는 이하의 농도에서 검출</li>
+                </ul>
+                <p><strong>균종 동정 가능:</strong> 그람염색으로는 단지 그람양성/음성 정도만 가능</p>
+                <p><strong>항균제감수성검사 가능</strong></p>
+            </div>
+
+            <h4>2) 단점</h4>
+            <p>시간이 오래 걸린다</p>
+
+            <h3>2. 검체</h3>
+
+            <div class="note">
+                <p><strong>이상적인 검체란,</strong> 의사가 얻고자 하는 모든 정보를 얻을 수 있고, 환자로부터 얻어진 조직 또는 가검물 일부를 말한다. 따라서 감염증 환자의 진단에 필요한 검체는 병소로부터 얻어진 검체이며 숙시에 오염이 없는 검체이어야 한다.</p>
+            </div>
+
+            <h4>1) 검체 특성</h4>
+            <ul>
+                <li><strong>정상적으로 무균상태인 검체:</strong> 뇌척수액, 혈액, 관절액 등</li>
+                <li><strong>정상적으로 정상 상재균(normal flora)이 존재하는 검체:</strong> 피부, 대변 등</li>
+                <li><strong>정상상태에서는 세균이 없으나 채취과정에서 어느 정도 세균 오염이 되는 검체:</strong> 소변 등</li>
+            </ul>
+
+            <h4>2) 검체관련 정보</h4>
+            <ul>
+                <li>환자에 관한 정보가 검사실로 충분히 전달되면 균의 분리와 동정에 도움이 된다</li>
+                <li>검체의 종류 및 채취 부위에 따라 검사 조건이 달라지므로, 이 항목은 필수적으로 기록해야 한다</li>
+                <li>임상 소견 및 의심되는 균종, 채취 시간, 항균제 투여 여부, 백혈병 또는 항암제 투여 등 환자의 면역 기능이 저하되었을 지의 여부 등도 기록한다</li>
+            </ul>
+
+            <h4>3) 검체 채취</h4>
+            
+            <div class="warning">
+                <p><strong>올바른 방법으로 적합한 부위에서 검체를 채취해야 하는 것은 아무리 강조해도 지나치지 않다</strong></p>
+                <p>예를 들어 욕창병 환자가 뼈에 골수염(osteomyelitis)을 동반하고 있는 경우, 골수염의 원인균을 밝혀내기 위해서는 염증이 모이는 피부 주변에서 검체를 얻으면 피부상재균이 증식하여 원인균을 밝혀내기는 어렵고 또한 정확한 균이 분리되지 않는 경우도 있다</p>
+            </div>
+
+            <p><strong>세균배양을 하기 위해 검체를 채취할 때 임상의가 지켜야 할 사항:</strong></p>
+            <ol>
+                <li>모든 검체는 채취 후 즉시 검사실로 보내는 것을 원칙으로 한다</li>
+                <li>검체는 항균제 투여 전에 채취해야 한다</li>
+                <li>피부의 소독은 70% alcohol로 안에서 바깥으로 동심원을 그리며 소독한 후, povidone-iodine으로 소독하고 1분간 기다린다</li>
+                <li>정상 상재균이나 오염 가능성을 염두에 둔다</li>
+                <li>주사기로 직접 취한 부위의 농은 확인하여, 주사침 마개로 주사침을 막은 후 그대로 진단검사실로 보낸다</li>
+                <li><strong>혈액:</strong> 70% ethanol로 1차 소독한 뒤, povidone-iodine으로 2차 소독하고 완전히 마른 후 채혈한다. 1회에 20 mL를 채혈, 한 세트(산소성 혈액배양병 1개와 무산소성 혈액배양병 1개)에 각각 10 mL씩 넣는다</li>
+                <li><strong>뇌척수액:</strong> 최소한 2 mL을 받는다. 10 mL가 가장 좋다. 응급검사로 간주하여 빨리 진단검사실로 보낸다. 냉장 보관하면 안된다</li>
+                <li><strong>객담:</strong> 아침에 일어나서 수돗물로 양치를 하고 깊은 기침을 하여 무균용기에 객담을 받는다</li>
+                <li><strong>대변:</strong> Shigella 감염 의심 시는 직장면봉(rectal swab)을 채취 Stuart 수송배지에, Salmonella 감염 의심 시는 대변을 1~2 gm 채취</li>
+                <li><strong>소변:</strong> 요도 상재균의 오염을 막기 위해 요도 입구를 소독한 후 중간뇨(clean-catched midstream)를 받는 것이 원칙이다</li>
+                <li><strong>무산소성 검체:</strong> 주사기를 사용, 공기를 배출시키고, 주사침을 고무마개로 막고 즉시 진단검사실로 보낸다</li>
+            </ol>
+
+            <h4>4) 검체의 이송</h4>
+            <ol>
+                <li>모든 검체는 채취 후 즉시 보내는 것이 원칙이다</li>
+                <li>검사 의뢰서와 검체를 담은 용기의 기록 사항이 맞아야 한다</li>
+                <li>대부분의 병원균은 온도변화에 큰 영향을 받지 않지만, 건조한 환경에서는 생존이 어렵다. 단 <em>Neisseria meningitidis</em>와 <em>N. gonorrhoeae</em> 의심 검체는 냉장 보관하지 않도록 유의한다</li>
+                <li>검체 이송 시 주변이 오염되지 않도록 주의한다</li>
+            </ol>
+
+            <h3>3. 배지</h3>
+
+            <p>배지는 세균이 증식할 수 있게끔 해준다. 세균은 유기체이기 때문에 주로 구성물질은 nitrogen 원 carbon이다.</p>
+
+            <h4>1) 성분</h4>
+            <ul>
+                <li><strong>Protein hydrolysates, carbohydrates, buffers, enrichments</strong> (예: 혈액, 혈청, 비타민)</li>
+                <li><strong>Inhibitors:</strong> aniline dyes (예: brilliant green), heavy metals (예: bismuth), chemicals (예: azide, desoxycholate, selenite, phenylethyl alcohol), 항균제(예: neomycin, colistin, vancomycin)</li>
+                <li><strong>pH indicator:</strong> methylene blue, neutral red, phenol red, bromcresol purple</li>
+            </ul>
+
+            <h4>2) 배지의 종류</h4>
+
+            <div class="section">
+                <h4>① 비선택배지(nonselective media)</h4>
+                <ul>
+                    <li>억제물질을 함유하고 있지 않으므로 대부분의 균이 최대한 증식하도록 하는데 이용된다</li>
+                    <li>대표적인 비선택배지인 혈액한천배지에 있는 혈액은 영양소를 추가로 공급하여 주는 역할 외에 용혈 양상을 알 수 있게끔 해준다</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h4>② 선택 및 감별배지(selective and/or differential media)</h4>
+                <p><strong>Moderately inhibitory media:</strong> 정상 상재균 또는 여러 균이 혼합된 검체의 배양에 이용</p>
+                <ul>
+                    <li>MacConkey 배지(neutral red-bile salt agar)가 대표적</li>
+                    <li>Lactose만 있기 때문에 lactose를 이용하는 균은 산을 생성하고 생성된 산이 neutral red와 작용하여 분홍색을 띤다</li>
+                </ul>
+                <p><strong>Highly selective media:</strong> E. coli를 억제하는 상태에서 있어 Salmonella, Shigella를 대변에서 배양할 때 사용</p>
+                <ul>
+                    <li>예: Salmonella-Shigella (SS) 배지, Xylose lysine desoxycholate (XLD) 배지, Hektoen enteric (HE) 배지</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h4>③ 농축 액체배지(enrichment broth)</h4>
+                <ul>
+                    <li>분리하고자 하는 특정 세균의 증식은 도와주고 원하지 않는 세균의 증식은 억제하는 액체배지</li>
+                    <li>주로 대변에서 Salmonella, Shigella의 분리에 사용 (예: Selenite broth, GN broth)</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h4>④ 수송배지(transport media)</h4>
+                <ul>
+                    <li>swab 검체에 이용</li>
+                    <li>Carbohydrate, peptone 등이 없어서 증식보다는 균의 생존을 유지하는 것이 목적</li>
+                    <li>예: Amies 배지, Stuart 배지, Cary-Blair 배지</li>
+                </ul>
+            </div>
+
+            <h4>3) 배지의 형태</h4>
+            <ul>
+                <li><strong>액체배지(broth media):</strong> brain heart infusion broth, thioglycollate broth</li>
+                <li><strong>한천배지(agar media):</strong> 액체배지에 한천을 섞은 것으로서 고형상태이며 집락 형성에 유용하다</li>
+            </ul>
+
+            <h3>4. 세균의 동정</h3>
+
+            <h4>1) 그람음성/양성균의 동정</h4>
+            <ul>
+                <li>일차접종배지 중 MacConkey 배지에서 자란 균은 그람음성으로 판단하며, MacConkey 배지에서 안 자라고 혈액한천배지에만 자란 균은 그람양성으로 판단한다</li>
+                <li>그람염색과 생화학검사(catalase, coagulase, oxidase 등)를 수기로 시행할 수 있다</li>
+                <li>주로 자동화장비(Vitek2, MicroScan, Phoenix 등)를 이용하여 균종 동정 및 항균제감수성검사를 시행한다</li>
+            </ul>
+
+            <h4>2) MALDI-TOF mass spectrometry (MS)</h4>
+            <ul>
+                <li>배양된 세균의 집락을 금속판 위에 얇게 도말하고, matrix와 formic acid를 가한 뒤, MALDI-TOF 기기로 peptide pattern을 분석하면, 빠른 시간(약 2분/건)에 균종 동정이 가능하다</li>
+                <li>Yeast의 동정도 가능하며, mold의 경우는 아직 동정에 어려움이 있다</li>
+            </ul>
+
+            <h3>5. 항균제감수성검사</h3>
+
+            <h4>1) 희석법</h4>
+            <ul>
+                <li><strong>액체배지 미량희석법(broth microdilution):</strong> reference method</li>
+                <li><strong>고체배지 희석법(agar dilution)</strong></li>
                 <li><strong>MIC</strong> (minimum inhibitory concentration): 최소억제농도</li>
                 <li><strong>MBC</strong> (minimum bactericidal concentration): 접종세균의 99.9%를 죽이는 항생제의 농도</li>
                 <li><strong>Serum bactericidal level:</strong> 접종세균의 99.9%를 죽이는 혈청 희석배수</li>
@@ -51,4 +555,130 @@
             <ul>
                 <li><strong>무산소성 그람음성막대균:</strong> Bacteroides, Porphyromonas, Prevotella, Fusobacterium</li>
                 <li><strong>무산소성 그람음성알균:</strong> Veillonella, Acidaminococcus, Megasphaera</li>
-                <li><strong>무산소성 그람양성알균:</strong> Finegoldia magna, Parvimonas micra, Peptost
+                <li><strong>무산소성 그람양성알균:</strong> Finegoldia magna, Parvimonas micra, Peptostreptococcus anaerobius</li>
+                <li><strong>무산소성 그람양성막대균:</strong> Clostridium, Cutibacterium</li>
+            </ul>
+
+            <h2>■ 결핵균검사</h2>
+
+            <h3>1. 검체처리 및 배양법 (객담)</h3>
+
+            <div class="method-step">
+                <ol>
+                    <li>객담과 동량의 4% NaOH를 섞는다 (1시간을 넘기지 말 것, vortex mixer 사용)</li>
+                    <li>2,000 g에서 30분간 원심분리한다</li>
+                    <li>상층액을 버리고 침전물을 vortex mixer로 혼합한다</li>
+                    <li>Loop로 슬라이드에 도말한다</li>
+                    <li>침전물로 배지의 전면에 골고루 접종한다</li>
+                    <li>35~37℃에서 배양시킨다 (CO2 배양기가 좋다)</li>
+                    <li>매주 균집락을 관찰하여 보고하며 최종보고는 8주 후에 한다</li>
+                </ol>
+            </div>
+
+            <div class="warning">
+                <p><strong>주의사항:</strong></p>
+                <ul>
+                    <li><strong>4% NaOH 소화(digestion) 이유:</strong> 객담을 균질하게 풀어지게 하고 잡균을 억제 및 제거한다</li>
+                    <li>NaOH 처리부터 배양까지는 1시간 이내에 조작한다 (오래 노출되면 균이 사멸함)</li>
+                    <li>검체 처리는 laminar flow 안에서 한다</li>
+                </ul>
+            </div>
+
+            <h3>2. 검체의 보관 및 운반</h3>
+            <ol>
+                <li>검체 중의 결핵균은 채취 후 시간이 경과할수록 균의 생균력이 약해진다</li>
+                <li>즉시 검사하는 것을 원칙으로 하나, 부득이한 경우에는 냉장고에 보관한다</li>
+                <li>객담과 대변은 운송용 객담통을 이용하며 밖으로 세지 않게 조심한다</li>
+            </ol>
+
+            <h3>3. 항산성 염색(acid-fast stain): Ziehl-Neelsen 법</h3>
+
+            <h4>방법:</h4>
+            <div class="method-step">
+                <ol>
+                    <li>도말 후 불로 고정한다</li>
+                    <li>Carbol fuchsin을 얹고 김이 나되 끓지 않을 정도로 가열한다</li>
+                    <li>5분간 놓아 둔다. 마르면 안된다</li>
+                    <li>흐르는 물로 씻는다</li>
+                    <li>3% HCl-Alcohol로 1분간 탈색한다</li>
+                    <li>물로 씻고 대조염색액(methylene blue)을 얹고 1분간 염색한다</li>
+                    <li>물로 씻고 슬라이드를 세워서 말린다</li>
+                    <li>1,000배로 검경한다</li>
+                </ol>
+            </div>
+
+            <h4>AFB 염색 보고 방법 (CDC 기준):</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>AFB 수 / 시야</th>
+                        <th>CDC 보고 방법</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>0</td>
+                        <td>AFB 음성</td>
+                    </tr>
+                    <tr>
+                        <td>1~2 / 300 시야</td>
+                        <td>+/- (재검 필요)</td>
+                    </tr>
+                    <tr>
+                        <td>1~9 / 100 시야</td>
+                        <td>1+</td>
+                    </tr>
+                    <tr>
+                        <td>1~9 / 10 시야</td>
+                        <td>2+</td>
+                    </tr>
+                    <tr>
+                        <td>1~9 / 1 시야</td>
+                        <td>3+</td>
+                    </tr>
+                    <tr>
+                        <td>&gt;9 / 1 시야</td>
+                        <td>4+</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>4. 항산균 배양</h3>
+            <ul>
+                <li><strong>고체배지:</strong> Ogawa 배지, Lowenstein-Jensen 배지</li>
+                <li><strong>액체배지:</strong> MGIT (Mycobacteria growth indicator tube) 배지</li>
+                <li>결핵균은 느리게 자라서 약 6~8주 배양이 필요한 경우도 있으며, 액체배지가 고체배지에 비해 빠르게 검출된다</li>
+            </ul>
+
+            <h2>■ 진균검사</h2>
+
+            <h3>1. KOH mount</h3>
+            <div class="method-step">
+                <ol>
+                    <li>10% KOH 한 방울을 떨어뜨리고 검체를 놓는다</li>
+                    <li>Cover slip을 넣고 검경(200배, 400배): yeast 혹은 hyphae 관찰</li>
+                    <li><strong>보고:</strong> Yeast-like organism in budding with pseudohyphae, Yeast-like organism, Only hyphae observed</li>
+                </ol>
+            </div>
+
+            <h3>2. India ink mount</h3>
+            <div class="method-step">
+                <ol>
+                    <li>India ink 1방울을 떨어뜨리고 검체 1방울을 떨어뜨린다 (뇌척수액은 1500 rpm, 10분 원심 후 침전물 이용)</li>
+                    <li>Cover slip을 넣고 검경(200배, 400배): capsule을 유의하여 관찰하고 budding 확인</li>
+                    <li><strong>보고:</strong> "Yeast-like organisms (capsule이 확실하면 Cryptococcus)"로 보고한다</li>
+                </ol>
+            </div>
+
+            <h3>3. 배양</h3>
+
+            <h4>1) 배지</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>검체 종류</th>
+                        <th>사용 배지</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
