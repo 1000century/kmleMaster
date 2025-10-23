@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>진단검사의학실습: 혈액은행 퀴즈</title>
+    <style>
+        :root {
+            --primary-color: #005A9C; /* 딥 블루 */
+            --light-gray: #f4f7f6;
+            --medium-gray: #e0e0e0;
+            --dark-gray: #4a4a4a;
+            --text-color: #333;
+            --correct-bg: #d4edda;
+            --correct-border: #c3e6cb;
+            --correct-text: #155724;
+            --incorrect-bg: #f8d7da;
+            --incorrect-border: #f5c6cb;
+            --incorrect-text: #721c24;
+            --white: #ffffff;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+            background-color: var(--light-gray);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        #quiz-container {
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 700px;
+            overflow: hidden;
+        }
+
+        #quiz-header {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 20px 25px;
+        }
+
+        #quiz-header h1 {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+
+        #progress-container {
+            width: 100%;
+            background-color: var(--medium-gray);
+            height: 8px;
+        }
+
+        #progress-bar {
+            width: 0%;
+            height: 100%;
+            background-color: #4CAF50; /* 진행률 바 색상 */
+            transition: width 0.3s ease;
+        }
+        
+        #progress-text {
+            font-size: 0.9em;
+            font-weight: bold;
+            color: rgba(255,255,255,0.8);
+        }
+
+        #quiz-main {
+            padding: 25px;
+        }
+        
+        #score-display {
+            font-size: 1em;
+            font-weight: bold;
+            color: var(--dark-gray);
+            text-align: right;
+            margin-bottom: 15px;
+        }
+
+        #question-text {
+            font-size: 1.25em;
+            font-weight: 600;
+            line-height: 1.5;
+            color: var(--text-color);
+            margin-bottom: 25px;
+        }
+
+        #answer-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .answer-option {
+            font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+            font-size: 1em;
+            text-align: left;
+            padding: 15px;
+            border: 2px solid var(--medium-gray);
+            border-radius: 8px;
+            background-color: var(--white);
+            color: var(--dark-gray);
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            line-height: 1.4;
+        }
+
+        .answer-option:hover:not(:disabled) {
+            background-color: #f8f9fa;
+            border-color: var(--primary-color);
+        }
+        
+        .answer-option:disabled {
+            cursor: not-allowed;
+            opacity: 0.9;
+        }
+
+        .answer-option.correct {
+            background-color: var(--correct-bg);
+            border-color: var(--correct-border);
+            color: var(--correct-text);
+            font-weight: bold;
+        }
+
+        .answer-option.incorrect {
+            background-color: var(--incorrect-bg);
+            border-color: var(--incorrect-border);
+            color: var(--incorrect-text);
+            font-weight: bold;
+        }
+
+        #feedback-text {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        #feedback-text p {
+            margin-bottom: 10px;
+        }
+        
+        #feedback-text .rationale {
+            font-style: italic;
+            color: #555;
+        }
+
+        .correct-feedback {
+            color: var(--correct-text);
+            font-weight: bold;
+        }
+
+        .incorrect-feedback {
+            color: var(--incorrect-text);
+            font-weight: bold;
+        }
+
+        #quiz-footer {
+            padding: 25px;
+            border-top: 1px solid var(--light-gray);
+            text-align: right;
+        }
+        
+        #next-button {
+            font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+            font-size: 1em;
+            font-weight: bold;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: none; /* 초기에는 숨김 */
+        }
+        
+        #next-button:hover {
+            background-color: #004a80;
+        }
+
+        #results-container {
+            text-align: center;
+            padding: 40px 25px;
+        }
+
+        #results-container h2 {
+            font-size: 2em;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        #results-container p {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        #final-score {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: var(--text-color);
+            margin-bottom: 25px;
+        }
+
+        #restart-button {
+            font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+            font-size: 1.1em;
+            font-weight: bold;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            background-color: #28a745; /* 재시작 버튼 색상 */
+            color: var(--white);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        #restart-button:hover {
+            background-color: #218838;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="quiz-container">
+        <div id="quiz-header">
+            <h1>진단검사의학실습: 혈액은행 퀴즈</h1>
+            <p id="progress-text">문제 1 / 40</p>
+            <div id="progress-container">
+                <div id="progress-bar"></div>
+            </div>
+        </div>
+
+        <div id="quiz-main" class="hidden">
+            <div id="score-display">점수: 0</div>
+            <div id="question-text">질문이 여기에 로드됩니다.</div>
+            <div id="answer-options">
+                </div>
+            <div id="feedback-text"></div>
+        </div>
+        
+        <div id="quiz-footer" class="hidden">
+            <button id="next-button">다음 문제</button>
+        </div>
+
+        <div id="results-container" class="hidden">
+            <h2>🎉 퀴즈 완료!</h2>
+            <p>수고하셨습니다.</p>
+            <p>최종 점수:</p>
+            <p id="final-score">0 / 40</p>
+            <p id="percentage"></p>
+            <button id="restart-button">다시 풀기</button>
+        </div>
+    </div>
+
+    <script>
+        // 1. 퀴즈 데이터 (JSON)
+        const quizData = {
+          "questions": [
+            {
+              "questionNumber": 1,
+              "question": "농축적혈구(Packed RBC)의 주된 적응증으로 옳은 것은 무엇입니까?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "여러 혈액응고인자의 결핍으로 인한 출혈성 환자",
+                  "rationale": "이는 여러 응고인자를 포함하는 신선동결혈장(FFP)의 주된 적응증입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "정상 혈액량을 가진 빈혈환자의 산소운반능 보충",
+                  "rationale": "농축적혈구는 동등한 산소운반능력을 가지며, 만성빈혈환자 등에게 사용됩니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "심한 혈소판 감소증으로 인한 출혈",
+                  "rationale": "이는 혈소판제제(농축혈소판 또는 성분채혈혈소판)의 적응증입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A형 혈우병 또는 von Willebrand 병",
+                  "rationale": "이는 Factor VIII과 von Willebrand factor를 포함하는 동결침전제제의 적응증입니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "신부전이나 악성종양으로 인한 만성빈혈환자를 생각해 보세요."
+            },
+            {
+              "questionNumber": 2,
+              "question": "세척적혈구(Washed RBC)가 필요한 환자는 다음 중 누구입니까?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "급성 출혈로 대량 수혈이 필요한 환자",
+                  "rationale": "이 경우 일반 농축적혈구가 우선적으로 사용됩니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "수혈 시 재발성 또는 중증의 발열성 수혈반응을 보인 환자",
+                  "rationale": "세척 과정은 백혈구나 혈장 단백질 등 잔류 물질을 줄여 발열성 또는 알레르기 반응을 예방합니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "선천성응고인자결핍증(Factor V) 환자",
+                  "rationale": "이 환자들은 응고인자가 포함된 신선동결혈장(FFP)이 필요합니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "철분 결핍성 빈혈 환자",
+                  "rationale": "철분 결핍성 빈혈은 경구 또는 주사 철분제 치료가 우선이며, 수혈이 필요시 일반 농축적혈구를 사용합니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "세척 과정이 혈장 단백질이나 사이토카인 같은 물질을 제거하는 목적과 관련 있습니다."
+            },
+            {
+              "questionNumber": 3,
+              "question": "신선동결혈장(FFP)의 올바른 보존 온도와 유효기간은 무엇입니까?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "4℃에서 35일",
+                  "rationale": "이는 CPDA-1 백에 보관된 농축적혈구의 보존 방법입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "실온(20~24℃)에서 120시간",
+                  "rationale": "이는 농축혈소판의 보존 방법입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "-18℃ 이하에서 1년",
+                  "rationale": "신선동결혈장은 응고인자를 보존하기 위해 -18℃ 이하에서 동결 보관하며, 유효기간은 1년입니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "1~6℃에서 24시간",
+                  "rationale": "이는 세척적혈구 제조 후의 유효기간 및 보존 온도입니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "FFP는 불안정한 혈액 응고인자를 보존하기 위해 동결 상태로 유지해야 합니다."
+            },
+            {
+              "questionNumber": 4,
+              "question": "전혈에서 제조된 농축혈소판(PC) 1 단위(unit)에 포함된 평균 혈소판 수는 얼마입니까?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "약 $1.0 \\times 10^{8}$ 개",
+                  "rationale": "이는 기준치보다 훨씬 적은 수치입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "약 $5.5 \\times 10^{10}$ 개",
+                  "rationale": "농축혈소판 1 단위에는 약 50~70 mL의 혈장 속에 $5.5 \\times 10^{10}$ 개의 혈소판이 들어 있습니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "약 $3.0 \\times 10^{11}$ 개",
+                  "rationale": "이는 한 명의 헌혈자로부터 얻는 성분채혈혈소판(SDP)에 포함된 평균 혈소판 수입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "약 $8.0 \\times 10^{12}$ 개",
+                  "rationale": "이는 기준치보다 훨씬 많은 수치입니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "이 수치는 성분채혈혈소판(SDP)의 약 1/6 정도입니다."
+            },
+            {
+              "questionNumber": 5,
+              "question": "농축혈소판(Platelet Concentrate)의 올바른 보존 방법은 무엇입니까?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "4℃ 냉장고에서 보존",
+                  "rationale": "4℃는 적혈구제제를 보존하는 온도로, 이 온도에서는 혈소판 기능이 소실됩니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "-18℃ 이하에서 동결 보존",
+                  "rationale": "이는 신선동결혈장이나 동결침전제제를 보존하는 온도입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "실온(20~24℃)에서 지속적으로 동요(agitation)하며 보존",
+                  "rationale": "혈소판은 기능을 유지하기 위해 실온에서 보관하며, 응집을 막기 위해 지속적인 동요가 필요합니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "실온(20~24℃)에서 움직이지 않게 고정하여 보존",
+                  "rationale": "혈소판을 동요 없이 보관하면 응집이 일어나 기능을 상실하게 됩니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "혈소판은 낮은 온도에서 기능이 저하되며, 서로 뭉치지 않도록 계속 움직여 주어야 합니다."
+            },
+            {
+              "questionNumber": 6,
+              "question": "성분채혈혈소판(SDP) 1 단위는 일반 농축혈소판(PC) 약 몇 단위에 해당합니까?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "약 1 단위",
+                  "rationale": "SDP는 PC 1 단위보다 훨씬 많은 양의 혈소판을 포함합니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "약 2 단위",
+                  "rationale": "이보다 더 많은 양에 해당합니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "약 6 단위",
+                  "rationale": "성분채혈혈소판은 한 명의 헌혈자로부터 많은 양의 혈소판을 채집하며, 이는 농축혈소판 약 6 단위에 해당합니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "약 12 단위",
+                  "rationale": "이는 일반적인 SDP 1 단위의 해당량보다 많습니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "성분채혈혈소판은 한 명의 공여자로부터 약 $3.0 \\times 10^{11}$ 개 이상의 혈소판을 얻습니다."
+            },
+            {
+              "questionNumber": 7,
+              "question": "동결침전제제(Cryoprecipitate) 1 단위에 포함된 주요 성분이 *아닌* 것은?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "Factor VIII:C",
+                  "rationale": "동결침전제제에는 Factor VIII:C가 80~120 단위 포함되어 있습니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Fibrinogen",
+                  "rationale": "동결침전제제에는 Fibrinogen이 약 250 mg 포함되어 있습니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "von Willebrand factor",
+                  "rationale": "동결침전제제에는 FFP에 함유된 양의 40~70%의 von Willebrand factor가 포함되어 있습니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "알부민(Albumin)",
+                  "rationale": "알부민은 동결침전제제의 주요 성분이 아니며, FFP를 해동 후 원심분리 시 상층 혈장에 남아 제거됩니다.",
+                  "isCorrect": true
+                }
+              ],
+              "hint": "동결침전제제는 신선동결혈장을 4℃에서 해동할 때 침전되는 단백질을 모은 것입니다."
+            },
+            {
+              "questionNumber": 8,
+              "question": "다음 중 동결침전제제(Cryoprecipitate)의 적응증으로 옳지 *않은* 것은?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "A형 혈우병",
+                  "rationale": "A형 혈우병은 Factor VIII 결핍으로, Factor VIII을 포함한 동결침전제제가 사용될 수 있습니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "파종성혈관내응고증(DIC)",
+                  "rationale": "DIC 등 섬유소원의 소모와 관계된 질환에서 Fibrinogen 보충을 위해 사용될 수 있습니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "선천성 Factor V 결핍증",
+                  "rationale": "Factor V 결핍증은 신선동결혈장(FFP)의 적응증입니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "선천성 섬유소원결핍증",
+                  "rationale": "Fibrinogen(섬유소원) 결핍증은 Fibrinogen을 다량 함유한 동결침전제제의 주요 적응증입니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "동결침전제제에 포함된 주요 응고인자 성분(Factor VIII, Fibrinogen, Factor XIII, vWF)을 생각해 보세요."
+            },
+            {
+              "questionNumber": 9,
+              "question": "백혈구제거 혈액제제의 사용 목적(적응증)으로 옳지 *않은* 것은?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "발열성비용혈수혈반응(FNHTR) 예방",
+                  "rationale": "제제 내 백혈구 성분은 발열성비용혈수혈반응을 유발할 수 있어, 백혈구 제거 시 예방 효과가 있습니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "혈소판수혈불응증(platelet refractoriness) 예방",
+                  "rationale": "백혈구 성분에 의해 유발되는 항체(anti-HLA)는 혈소판수혈불응증의 원인이 될 수 있습니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "급성용혈수혈반응(AHTR) 예방",
+                  "rationale": "급성용혈수혈반응은 주로 ABO 부적합 등 적혈구 항원-항체 반응에 의해 발생하며, 백혈구 제거와는 직접적인 관련이 적습니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "수혈전파성 바이러스 감염증(CMV 등) 예방",
+                  "rationale": "CMV 등 일부 바이러스는 백혈구를 통해 전파될 수 있으므로, 백혈구 제거가 감염 예방에 도움이 됩니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "백혈구제거 혈액제제는 수혈 제제에 남아있는 '백혈구'로 인해 발생하는 문제들을 예방하기 위해 사용됩니다."
+            },
+            {
+              "questionNumber": 10,
+              "question": "치료적 백혈구성분채집술(Therapeutic leukapheresis)의 주된 목적은 무엇입니까?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "환자 혈장 내의 자가항체 및 면역복합체 제거",
+                  "rationale": "이는 치료적 혈장분리술(plasmapheresis)의 목적입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "백혈구증가증 환자에서 혈관 내 암세포(백혈구) 수를 신속하게 제거",
+                  "rationale": "백혈구 수가 매우 많은 경우, 혈액의 점도를 높여 조직 관류를 방해할 수 있으므로, 물리적으로 백혈구를 제거합니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "헌혈자로부터 특정 백혈구(예: 림프구)를 채집하여 환자에게 수혈",
+                  "rationale": "이는 치료적 백혈구성분채집술의 목적이 아니라, 공여자 림f구 주입(DLI) 등을 위한 채집 과정입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "환자의 적혈구와 혈소판을 제거하여 골수 기능을 억제",
+                  "rationale": "적혈구와 혈소판이 함께 제거되는 것은 이 술식의 '부작용'입니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "이 시술은 혈액 내에 '백혈구'가 비정상적으로 너무 많을 때 시행합니다."
+            },
+            {
+              "questionNumber": 11,
+              "question": "치료적 혈장분리술(Therapeutic plasmapheresis)의 원리로 가장 적절한 것은?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "혈액을 원심분리하여 백혈구 층만 제거하고 나머지는 환자에게 되돌려준다.",
+                  "rationale": "이는 치료적 백혈구성분채집술(leukapheresis)의 원리입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "혈액을 원심분리하여 혈구는 되돌려주고 혈장을 제거한 후 보충수액을 투여한다.",
+                  "rationale": "이는 혈장 내의 병적 물질(항체, 독소 등)을 제거하기 위한 혈장분리술의 기본 원리입니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "환자의 전혈을 제거하고 건강한 헌혈자의 전혈을 수혈한다.",
+                  "rationale": "이는 교환수혈(exchange transfusion)의 원리와 유사합니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "특정 필터를 사용하여 혈액 내 사이토카인만 선택적으로 제거한다.",
+                  "rationale": "혈장분리술은 혈장 전체를 제거하는 방식이며, 특정 물질만 선택적으로 제거하는 것은 아닙니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "이 시술의 목적은 혈장(plasma)에 포함된 병의 원인 물질을 제거하는 것입니다."
+            },
+            {
+              "questionNumber": 12,
+              "question": "다음 중 치료적 혈장분리술(Therapeutic plasmapheresis)의 적응증이 *아닌* 것은?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "중증근무력증(Myasthenia gravis)",
+                  "rationale": "중증근무력증은 자가항체에 의한 질환으로, 혈장분리술의 적응증이 됩니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "길랑바레증후군(Guillain-Barre syndrome)",
+                  "rationale": "길랑바레증후군 역시 면역 매개 질환으로, 혈장분리술의 적응증이 됩니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A형 혈우병(Hemophilia A)",
+                  "rationale": "A형 혈우병은 Factor VIII이 결핍된 질환으로, 혈장분리술이 아닌 동결침전제제나 Factor VIII 농축제제를 투여해야 합니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "혈전혈소판감소자색반병(TTP)",
+                  "rationale": "TTP는 혈장분리술의 주요 적응증 중 하나입니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "혈장분리술은 주로 혈장 내 비정상적인 항체나 단백질을 제거하기 위해 사용됩니다."
+            },
+            {
+              "questionNumber": 13,
+              "question": "수혈전검사의 일차적인 목적은 무엇입니까?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "환자의 빈혈 원인을 규명하는 것",
+                  "rationale": "빈혈 원인 규명은 수혈전검사 이전에 임상적으로 이루어져야 할 진단 과정입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "용혈수혈반응을 예방하고 수혈된 적혈구의 생존을 보장하는 것",
+                  "rationale": "수혈전검사는 환자와 공여자 혈액 간의 부적합을 미리 확인하여 안전한 수혈을 보장하는 것이 주목적입니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "환자에게 수혈전파성감염이 있는지 확인하는 것",
+                  "rationale": "수혈전파성감염 검사는 헌혈자 혈액에 대해 시행되며, 환자에게 이미 있는지 확인하는 것은 수혈전검사의 주목적이 아닙니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "환자의 혈액 응고 기능을 평가하는 것",
+                  "rationale": "혈액 응고 기능 평가는 별도의 검사(PT, aPTT 등)를 통해 이루어집니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "수혈의 가장 위험한 부작용 중 하나를 예방하는 것이 핵심입니다."
+            },
+            {
+              "questionNumber": 14,
+              "question": "ABO 혈액형 검사 중 혈구형(Cell typing) 검사에서 환자의 적혈구와 반응시키는 시약은 무엇입니까?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "항-D 혈청 (Anti-D)",
+                  "rationale": "항-D 혈청은 RhD 혈액형을 판정하기 위해 사용됩니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A형 혈구 (A cell)와 B형 혈구 (B cell)",
+                  "rationale": "A형 혈구와 B형 혈구는 환자의 혈청과 반응시켜 혈청형(Serum typing)을 검사할 때 사용됩니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "항-A 혈청 (Anti-A)과 항-B 혈청 (Anti-B)",
+                  "rationale": "혈구형 검사는 환자의 적혈구 표면에 어떤 항원이 있는지를 알기 위해 항-A 및 항-B 혈청과 반응시킵니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "항글로불린 혈청 (Antiglobulin serum)",
+                  "rationale": "항글로불린 혈청은 Weak D 검사나 비예기항체 검사, 항글로불린 검사(Coombs' test)에서 사용됩니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "환자 적혈구 표면의 '항원'을 확인하는 검사입니다."
+            },
+            {
+              "questionNumber": 15,
+              "question": "ABO 혈액형 검사 중 혈청형(Serum typing) 검사에서 환자의 혈청과 반응시키는 시약은 무엇입니까?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "항-A 혈청 (Anti-A)과 항-B 혈청 (Anti-B)",
+                  "rationale": "항-A 및 항-B 혈청은 환자의 적혈구와 반응시켜 혈구형(Cell typing)을 검사할 때 사용됩니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "항-D 혈청 (Anti-D)",
+                  "rationale": "항-D 혈청은 RhD 혈액형을 판정하기 위해 사용됩니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "환자 자신의 적혈구",
+                  "rationale": "환자의 혈청과 자신의 적혈구를 반응시키는 것은 자가대조시험(auto-control)에 해당합니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A형 혈구 (A cell)와 B형 혈구 (B cell)",
+                  "rationale": "혈청형 검사는 환자의 혈청 내에 어떤 '항체'가 있는지를 알기 위해 이미 알고 있는 A형 및 B형 혈구와 반응시킵니다.",
+                  "isCorrect": true
+                }
+              ],
+              "hint": "환자 혈청 속의 '항체'를 확인하는 검사입니다."
+            },
+            {
+              "questionNumber": 16,
+              "question": "A형 환자의 ABO 혈액형 검사 결과로 옳은 것은 무엇입니까?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "혈구형: 항-A 응집 (+), 항-B 응집 없음 (0) / 혈청형: A cell 응집 없음 (0), B cell 응집 (+)",
+                  "rationale": "A형 환자는 적혈구에 A항원을 (항-A와 응집), 혈청에 anti-B 항체를 (B cell과 응집) 가집니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "혈구형: 항-A 응집 없음 (0), 항-B 응집 (+) / 혈청형: A cell 응집 (+), B cell 응집 없음 (0)",
+                  "rationale": "이는 B형 환자의 검사 결과입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "혈구형: 항-A 응집 없음 (0), 항-B 응집 없음 (0) / 혈청형: A cell 응집 (+), B cell 응집 (+)",
+                  "rationale": "이는 O형 환자의 검사 결과입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "혈구형: 항-A 응집 (+), 항-B 응집 (+) / 혈청형: A cell 응집 없음 (0), B cell 응집 없음 (0)",
+                  "rationale": "이는 AB형 환자의 검사 결과입니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "A형 환자는 A항원과 anti-B 항체를 가지고 있습니다."
+            },
+            {
+              "questionNumber": 17,
+              "question": "O형 환자의 ABO 혈액형 검사 결과로 옳은 것은 무엇입니까?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "혈구형: 항-A 응집 (+), 항-B 응집 없음 (0) / 혈청형: A cell 응집 없음 (0), B cell 응집 (+)",
+                  "rationale": "이는 A형 환자의 검사 결과입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "혈구형: 항-A 응집 없음 (0), 항-B 응집 (+) / 혈청형: A cell 응집 (+), B cell 응집 없음 (0)",
+                  "rationale": "이는 B형 환자의 검사 결과입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "혈구형: 항-A 응집 없음 (0), 항-B 응집 없음 (0) / 혈청형: A cell 응집 (+), B cell 응집 (+)",
+                  "rationale": "O형 환자는 적혈구에 항원이 없고 (응집 없음), 혈청에 anti-A와 anti-B 항체를 모두 가집니다 (모두 응집).",
+                  "isCorrect": true
+                },
+                {
+                  "text": "혈구형: 항-A 응집 (+), 항-B 응집 (+) / 혈청형: A cell 응집 없음 (0), B cell 응집 없음 (0)",
+                  "rationale": "이는 AB형 환자의 검사 결과입니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "O형 환자는 항원이 없고, anti-A와 anti-B 항체를 모두 가지고 있습니다."
+            },
+            {
+              "questionNumber": 18,
+              "question": "AB형 환자의 ABO 혈액형 검사 결과로 옳은 것은 무엇입니까?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "혈구형: 항-A 응집 (+), 항-B 응집 없음 (0) / 혈청형: A cell 응집 없음 (0), B cell 응집 (+)",
+                  "rationale": "이는 A형 환자의 검사 결과입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "혈구형: 항-A 응집 없음 (0), 항-B 응집 (+) / 혈청형: A cell 응집 (+), B cell 응집 없음 (0)",
+                  "rationale": "이는 B형 환자의 검사 결과입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "혈구형: 항-A 응집 없음 (0), 항-B 응집 없음 (0) / 혈청형: A cell 응집 (+), B cell 응집 (+)",
+                  "rationale": "이는 O형 환자의 검사 결과입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "혈구형: 항-A 응집 (+), 항-B 응집 (+) / 혈청형: A cell 응집 없음 (0), B cell 응집 없음 (0)",
+                  "rationale": "AB형 환자는 적혈구에 A항원과 B항원을 모두 가지고 (모두 응집), 혈청에 항체가 없습니다 (응집 없음).",
+                  "isCorrect": true
+                }
+              ],
+              "hint": "AB형 환자는 A, B 항원을 모두 가졌고, 항체는 없습니다."
+            },
+            {
+              "questionNumber": 19,
+              "question": "ABO 혈구형 검사와 혈청형 검사 결과가 일치하지 않는 'ABO 불일치(discrepancy)'의 원인으로 보기 *어려운* 것은?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "A형의 아형 (Subgroups of A)",
+                  "rationale": "A형의 아형은 항-A 혈청과 약한 반응을 보여 불일치를 유발할 수 있습니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "한랭 자가응집소 (Cold autoagglutinin)",
+                  "rationale": "한랭 자가응집소는 혈구형, 혈청형 모두에서 비특이적 응집을 일으켜 불일치를 유발할 수 있습니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "RhD 양성 혈액형",
+                  "rationale": "RhD 혈액형은 ABO 혈액형 시스템과 무관하므로, ABO 불일치의 원인이 되지 않습니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "비예기항체 (Alloantibodies)의 존재",
+                  "rationale": "Anti-M, P1, Lea 등의 비예기항체(동종항체)가 혈청형 검사에 사용되는 A cell이나 B cell과 반응하여 불일치를 일으킬 수 있습니다.",
+                  "isCorrect": false
+                }
+              ],
+              [cite_start]"hint": "ABO 불일치는 ABO 시스템 자체의 문제(아형)나, 검사를 방해하는 다른 항체/단백질 때문에 발생합니다. [cite: 155-160]"
+            },
+            {
+              "questionNumber": 20,
+              "question": "RhD typing에서 항-D 혈청(anti-D)과 반응하여 응집이 보이지 않을 때, RhD 음성으로 판정하기 전에 반드시 추가로 시행해야 하는 검사는 무엇입니까?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "혈청형 검사 (Serum typing)",
+                  "rationale": "RhD typing은 혈구형 검사만 시행하며, 혈청형 검사는 ABO typing에 해당합니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Weak D test",
+                  "rationale": "항-D와 응집이 없더라도 약한 D 항원(Weak D)이 존재할 수 있으므로, 항글로불린 혈청을 이용한 Weak D 검사를 시행하여 확인해야 합니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "직접 항글로불린 검사 (DAT)",
+                  "rationale": "DAT는 생체 내에서 적혈구가 이미 감작되었는지 보는 검사입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "교차시험 (Crossmatching)",
+                  "rationale": "교차시험은 혈액형 판정 후 수혈할 혈액을 선택하여 적합성을 보는 검사입니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "일부 D 항원은 항-D 시약과 바로 반응하지 않을 수 있습니다."
+            },
+            {
+              "questionNumber": 21,
+              "question": "Weak D (D\") test의 원리에 대한 설명으로 옳은 것은?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "환자 혈청 내의 anti-D 항체를 검출하는 검사이다.",
+                  "rationale": "Weak D test는 환자 적혈구의 D '항원'을 검사하는 것입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "항-D 혈청에 의해 감작은 되나 응집이 보이지 않는 적혈구에 항글로불린 혈청을 가해 응집을 확인한다.",
+                  "rationale": "소량이거나 약화된 D 항원은 항-D 혈청에 의해 감작만 되고 눈에 보이는 응집을 일으키지 못할 수 있습니다. 이때 항글로불린 혈청이 이 감작된 항체들을 연결시켜 응집을 유발합니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "환자 적혈구에 A, B 항원이 약하게 존재할 때 이를 확인하는 검사이다.",
+                  "rationale": "이는 ABO 아형(subgroup)에 대한 설명이며 Weak D와는 관련 없습니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "환자 혈청과 O형 panel cell을 반응시켜 비예기항체를 확인하는 검사이다.",
+                  "rationale": "이는 비예기항체 선별검사에 대한 설명입니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "이 검사는 항-D 시약만으로는 확인되지 않는 약한 D '항원'을 찾기 위해 '항글로불린 혈청'을 추가로 사용합니다."
+            },
+            {
+              "questionNumber": 22,
+              "question": "수혈 안전의 관점에서, '헌혈자'의 혈액이 Weak D로 판정되었을 때 이 혈액은 어떻게 간주해야 합니까?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "Rh 양성 (RhD Positive)으로 간주한다.",
+                  "rationale": "헌혈자의 혈액이 Weak D일 경우, Rh 음성 환자에게 수혈 시 항체(anti-D) 생성을 유발할 수 있으므로, 안전을 위해 Rh 양성으로 간주하여 Rh 양성 환자에게만 수혈합니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "Rh 음성 (RhD Negative)으로 간주한다.",
+                  "rationale": "Rh 음성으로 간주하는 것은 '수혈을 받는 환자'가 Weak D일 경우입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "ABO 혈액형에 따라 다르게 간주한다.",
+                  "rationale": "Weak D 판정은 RhD 혈액형에 관한 것으로 ABO 혈액형과는 무관합니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "해당 혈액은 폐기한다.",
+                  "rationale": "Weak D 혈액은 Rh 양성으로 분류되어 Rh 양성 환자에게 안전하게 수혈될 수 있으므로 폐기하지 않습니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "이 혈액이 Rh 음성 환자에게 수혈되었을 때 발생할 수 있는 '감작'의 위험을 생각해야 합니다."
+            },
+            {
+              "questionNumber": 23,
+              "question": "다음 중 AB형 환자에게 수혈 시 *거의* 문제되지 않는 선택은?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "O형 전혈(Whole blood) 수혈",
+                  "rationale": "O형 전혈에는 anti-A와 anti-B 항체가 모두 포함되어 있어 AB형 환자의 적혈구와 반응(용혈)할 수 있습니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "B형 전혈(Whole blood) 수혈",
+                  "rationale": "B형 전혈에는 anti-A 항체가 포함되어 있어 AB형 환자의 적혈구와 반응할 수 있습니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A형 농축적혈구(Packed RBC) 수혈",
+                  "rationale": "A형 농축적혈구는 혈장이 거의 제거된 상태이며, AB형 환자는 A항원을 이미 가지고 있어 항체가 없으므로 문제가 되지 않습니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "O형 환자에게 A형 농축적혈구 수혈",
+                  "rationale": "O형 환자는 anti-A 항체를 가지고 있으므로 A형 적혈구 수혈 시 심각한 용혈반응이 일어납니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "AB형 환자는 A항원과 B항원을 모두 가졌고, anti-A, anti-B 항체가 없습니다."
+            },
+            {
+              "questionNumber": 24,
+              "question": "다음 중 O형 환자에게 *절대로* 해서는 안 되는 수혈 선택은?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "O형 농축적혈구 수혈",
+                  "rationale": "O형 환자에게 O형 농축적혈구를 수혈하는 것이 가장 안전하고 원칙적인 선택입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A형 농축적혈구 수혈",
+                  "rationale": "O형 환자는 anti-A와 anti-B 항체를 모두 가지고 있으므로, A항원이 있는 A형 적혈구 수혈 시 심각한 급성용혈수혈반응을 일으킵니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "AB형 신선동결혈장(FFP) 수혈",
+                  "rationale": "AB형 FFP에는 항체가 없으므로 O형 환자에게 수혈해도 문제가 없습니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "O형 Rh(-) 환자에게 O형 Rh(+) 농축적혈구 수혈",
+                  "rationale": "이는 anti-D 항체 생성을 유발할 수 있어 피해야 하지만, 응급상황에서는 고려될 수 있으며 ABO 부적합처럼 '절대로' 안 되는 것은 아닙니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "O형 환자는 혈청에 anti-A와 anti-B 항체를 모두 가지고 있습니다."
+            },
+            {
+              "questionNumber": 25,
+              "question": "비예기항체(Unexpected antibody)에 대한 설명으로 옳은 것은?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "A형인 사람이 anti-B를 가지는 것과 같은 규칙적인 항체이다.",
+                  "rationale": "이는 예측 가능한 '예기 항체' 또는 '규칙 항체'에 대한 설명입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "ABO 항체를 제외한 대부분의 혈액형 항체로, 검사 전에는 존재 여부를 알 수 없다.",
+                  "rationale": "비예기 항체는 불규칙 항체라고도 하며, 임신이나 수혈 등에 의해 생성될 수 있고, 수혈 시 용혈 반응을 일으킬 수 있습니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "항체를 가진 사람 자신에게 심각한 용혈성 빈혈을 유발한다.",
+                  "rationale": "비예기 항체는 자신이 가지지 않은 항원에 대한 항체이므로, 자신에게는 문제가 되지 않으나 수혈 시 문제가 됩니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "한국인에서는 거의 발견되지 않으므로 수혈 전 검사가 필요 없다.",
+                  "rationale": "한국인에서도 약 0.6%의 보유 빈도를 보이며, 이 중 일부는 임상적으로 중요하므로 수혈 전 선별검사가 필요합니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "이 항체는 ABO 항체와 달리 '예측할 수 없는' 항체입니다."
+            },
+            {
+              "questionNumber": 26,
+              "question": "비예기항체 선별검사(Antibody screening test)에서 환자의 혈청과 반응시키기 위해 사용하는 'Panel cell'의 혈액형은 무엇입니까?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "환자와 동일한 ABO형 혈구",
+                  "rationale": "환자 혈청 내의 anti-A 또는 anti-B와의 반응을 피하기 위해 동일한 ABO형을 사용하지 않습니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "O형 혈구",
+                  "rationale": "O형 혈구는 A, B 항원이 없어 환자 혈청 내의 anti-A, anti-B와 반응하지 않으므로, ABO 항체 이외의 비예기항체를 검출하는 데 적합합니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "AB형 혈구",
+                  "rationale": "AB형 혈구는 A, B 항원을 모두 가지고 있어 O형이나 A, B형 환자의 혈청과 반응하므로 선별검사에 적합하지 않습니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "환자 자신의 혈구",
+                  "rationale": "환자 자신의 혈구를 사용하는 것은 자가항체 유무를 확인하는 자가대조시험입니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "ABO 항체의 간섭 없이 다른 혈액형 항체를 찾기 위해 A, B 항원이 없는 혈구가 필요합니다."
+            },
+            {
+              "questionNumber": 27,
+              "question": "교차시험(Crossmatching)을 시행하는 주된 목적으로 옳은 것은?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "환자의 ABO, RhD 혈액형을 최종 판정하기 위해",
+                  "rationale": "혈액형 판정(Typing)은 교차시험 이전에 별도로 시행됩니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "헌혈 혈액에 감염성 질환이 있는지 확인하기 위해",
+                  "rationale": "감염성 질환 검사는 헌혈자 선별 과정에서 이루어집니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "수혈될 헌혈자의 적혈구와 환자 혈청 간의 적합성을 최종 확인하기 위해",
+                  "rationale": "교차시험은 비예기항체의 존재나 ABO 판정 오류를 최종적으로 확인하여 용혈수혈반응을 예방하는 검사입니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "환자 혈청 내 비예기항체의 종류를 동정하기 위해",
+                  "rationale": "항체의 종류를 동정하는 것은 '비예기항체 동정검사'입니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "수혈하기 직전, 환자와 공여자 혈액이 서로 반응하지 않는지 '최종' 확인하는 과정입니다."
+            },
+            {
+              "questionNumber": 28,
+              "question": "직접 항글로불린 검사 (Direct Antiglobulin Test, DAT)의 원리로 옳은 것은?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "환자 혈청 속의 비예기항체를 검출한다.",
+                  "rationale": "환자 혈청 속의 항체를 검출하는 것은 '간접' 항글로불린 검사(IAT)입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "환자의 적혈구 표면에 A, B 항원이 있는지 확인한다.",
+                  "rationale": "이는 ABO 혈구형 검사(cell typing)의 원리입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "생체 내(in vivo)에서 환자의 적혈구에 항체나 보체가 부착되어 있는지 확인한다.",
+                  "rationale": "DAT는 환자 몸 안에서 이미 적혈구에 항체 등이 부착(감작)되었는지 확인하기 위해 환자의 적혈구를 '직접' 항글로불린 혈청과 반응시킵니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "시험관 내(in vitro)에서 환자 혈청과 시약 혈구를 반응시킨 후 감작 여부를 확인한다.",
+                  "rationale": "시험관 내에서 인위적으로 감작을 유도하여 혈청 내 항체를 검사하는 것은 '간접' 항글로불린 검사(IAT)입니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "이 검사는 환자의 몸 '안에서' 이미 적혈구에 문제가 생겼는지 '직접' 확인하는 검사입니다."
+            },
+            {
+              "questionNumber": 29,
+              "question": "직접 항글로불린 검사(DAT)가 양성으로 나올 수 있는 임상적 상황이 *아닌* 것은?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "자가면역성용혈성빈혈 (AIHA)",
+                  "rationale": "AIHA는 환자 스스로 자신의 적혈구에 대한 자가항체를 만들어 부착시키므로 DAT 양성을 보입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "신생아용혈성질환 (HDN)",
+                  "rationale": "모체의 항체(예: anti-D)가 태반을 넘어와 태아의 적혈구에 부착되므로 신생아(제대혈)에서 DAT 양성을 보입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "급성용혈수혈반응 (AHTR)",
+                  "rationale": "부적합한 혈액 수혈 후 환자의 항체가 수혈된 적혈구에 부착되므로 DAT 양성을 보일 수 있습니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A형 혈우병 환자",
+                  "rationale": "A형 혈우병은 응고인자(Factor VIII) 결핍 질환으로, 적혈구에 항체가 부착되는 병태가 아니므로 DAT는 음성입니다.",
+                  "isCorrect": true
+                }
+              ],
+              "hint": "DAT 양성은 '적혈구 표면에 항체가 부착된 상태'를 의미합니다. 이와 관련 없는 질환을 찾아보세요."
+            },
+            {
+              "questionNumber": 30,
+              "question": "간접 항글로불린 검사(Indirect Antiglobulin Test, IAT)가 이용되는 검사로 옳은 것은?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "자가면역성용혈성빈혈(AIHA) 진단",
+                  "rationale": "AIHA의 진단에는 주로 환자 적혈구를 직접 검사하는 DAT가 이용됩니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "신생아용혈성질환(HDN) 진단",
+                  "rationale": "신생아의 제대혈을 이용한 DAT가 진단에 이용됩니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "비예기항체 선별검사 및 Weak D 검사",
+                  "rationale": "IAT는 환자 혈청 내의 비예기항체(온난항체)를 검출하거나(선별검사), 적혈구의 약한 항원(Weak D)을 검출하는 데 이용됩니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "ABO 혈구형 검사",
+                  "rationale": "ABO 혈구형 검사는 항-A, 항-B 시약과의 직접 응집을 보는 것으로 IAT를 이용하지 않습니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "이 검사는 '혈청 속에' 존재하는 항체나, '약한 항원'을 검출하기 위해 인위적으로 항글로불린 혈청을 사용합니다."
+            },
+            {
+              "questionNumber": 31,
+              "question": "수혈 시작 직전, 환자 곁에서 2명의 의료인이 소리 내어 재확인해야 할 사항으로 옳지 *않은* 것은?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "환자의 성명 및 등록번호",
+                  "rationale": "사무적 오류를 막기 위해 환자 정보 확인은 필수입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "혈액제제의 ABO 및 RhD 혈액형",
+                  "rationale": "환자의 혈액형과 수혈될 혈액의 혈액형이 일치하는지(또는 적합한지) 반드시 확인해야 합니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "교차시험 결과 표지",
+                  "rationale": "적합성 검사(교차시험)가 완료되었고 적합 판정을 받았는지 확인해야 합니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "헌혈자의 과거 헌혈 이력",
+                  "rationale": "헌혈자의 개인정보나 과거 이력은 수혈 직전 환자 곁에서 확인하는 사항이 아닙니다.",
+                  "isCorrect": true
+                }
+              ],
+              [cite_start]"hint": "환자에게 정확한 혈액이 수혈되는지 확인하는 마지막 안전 절차입니다. [cite: 234-236]"
+            },
+            {
+              "questionNumber": 32,
+              "question": "수혈 시작 후 5~15분 동안 환자를 면밀히 관찰해야 하는 가장 주된 이유는 무엇입니까?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "혈액 주입 속도를 조절하기 위해",
+                  "rationale": "주입 속도 조절도 필요하지만, 초기 관찰의 더 중요한 목적이 있습니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "수혈관련순환량과다(TACO)를 예방하기 위해",
+                  "rationale": "TACO는 수혈 속도나 양과 관련이 있지만, 15분 이내의 초기 반응보다는 수혈 중후반이나 종료 후에 나타나는 경우가 많습니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "아나필락시스, 용혈수혈반응 등 중증 급성수혈반응을 조기에 발견하기 위해",
+                  "rationale": "생명을 위협할 수 있는 심각한 수혈 부작용(용혈, 아나필락시스 등)은 대부분 수혈 시작 15분 이내에 발생하므로, 조기 발견 및 대처가 중요합니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "혈액이 세균에 오염되었는지 확인하기 위해",
+                  "rationale": "세균 오염에 의한 패혈성 쇼크도 초기에 나타날 수 있지만, 용혈반응, 아나필락시스 등 더 광범위한 중증 반응을 포괄하는 것이 주된 이유입니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "가장 치명적이고 즉각적인 수혈 부작용은 수혈 초기에 나타나는 경향이 있습니다."
+            },
+            {
+              "questionNumber": 33,
+              "question": "혈액제제와 함께 정맥주입로를 통해 *안전하게* 투여될 수 있는 용액은 원칙적으로 무엇입니까?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "5% 포도당 용액 (D5W)",
+                  "rationale": "저장성 용액인 포도당 용액은 적혈구 용혈을 일으킬 수 있어 금기입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "하트만 용액 (Lactated Ringer's solution)",
+                  "rationale": "하트만 용액 등에는 칼슘이 포함되어 있어 혈액백 내의 항응고제(Citrate)와 반응하여 혈액을 응고시킬 수 있습니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "0.9% 생리식염수 (Normal Saline)",
+                  "rationale": "0.9% 생리식염수는 칼슘이 없고 등장성 용액이므로 혈액제제와 함께 투여될 수 있는 유일한 정질액입니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "모든 종류의 항생제 주사액",
+                  "rationale": "원칙적으로 혈액제제에 약제를 같이 주입해서는 안 됩니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "칼슘을 함유하거나(응고 유발) 저장성 용액(용혈 유발)은 피해야 합니다."
+            },
+            {
+              "questionNumber": 34,
+              "question": "농축적혈구 1 단위를 수혈할 때, 세균 증식의 위험 때문에 원칙적으로 몇 시간 이내에 주입을 완료해야 합니까?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "30분",
+                  "rationale": "30분은 혈액이 혈액은행에서 출고된 후 수혈을 시작해야 하는 최대 대기 시간입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "1시간",
+                  "rationale": "1~2시간은 일반적인 농축적혈구의 권장 주입 시간이지만, 최대 허용 시간은 아닙니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "4시간",
+                  "rationale": "혈액제제는 실온에 오래 방치되면 세균 증식의 위험이 있으므로, 4시간 이내에 수혈을 마치는 것이 원칙입니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "6시간",
+                  "rationale": "6시간은 하나의 수혈 세트를 사용할 수 있는 최대 시간입니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "혈액은 실온에서 세균이 자라기 좋은 배지가 될 수 있습니다."
+            },
+            {
+              "questionNumber": 35,
+              "question": "차가운 혈액을 수혈할 때 심장마비 등을 예방하기 위해 혈액가온기(blood warmer)를 사용해야 하는 경우로 옳지 *않은* 것은?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "성인에게 시간당 50 mL/kg 이상의 대량 수혈 시",
+                  "rationale": "대량의 차가운 혈액이 빠른 속도로 주입되면 저체온증과 심장마비를 일으킬 수 있어 가온기가 필요합니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "한랭응집소를 가진 환자에게 수혈 시",
+                  "rationale": "한랭응집소는 낮은 온도에서 적혈구 응집을 일으키므로 혈액을 가온하여 주입해야 합니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "영아의 교환 수혈 시",
+                  "rationale": "체온 조절이 미숙한 영아의 교환 수혈 시 저체온증 예방을 위해 가온기가 필요합니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "만성 빈혈 환자에게 농축적혈구 1단위를 2시간에 걸쳐 수혈 시",
+                  "rationale": "소량의 혈액을 천천히 주입하는 일반적인 수혈에서는 저체온증 위험이 낮으므로 혈액가온기가 필요하지 않습니다.",
+                  "isCorrect": true
+                }
+              ],
+              [cite_start]"hint": "혈액가온기는 '대량' 또는 '빠른 속도'의 수혈, 또는 '차가운 온도에 민감한' 특정 환자에게 필요합니다. [cite: 261, 264-270]"
+            },
+            {
+              "questionNumber": 36,
+              "question": "급성용혈수혈반응(AHTR)의 가장 중요하고 흔한 원인은 무엇입니까?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "백혈구에 대한 항체 (Anti-leukocyte antibody)",
+                  "rationale": "이는 발열성비용혈수혈반응(FNHTR)의 주된 원인입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "ABO 부적합 수혈 (ABO incompatibility)",
+                  "rationale": "급성용혈수혈반응 중 가장 심각하고 치명적인 경우는 ABO 부적합에 의한 혈관 내 용혈이며, 이는 대부분 사무적인 오류에서 비롯됩니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "혈장 단백질에 대한 알레르기",
+                  "rationale": "이는 알레르기 반응이나 아나필락시스 반응의 원인입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "혈액제제의 세균 오염",
+                  "rationale": "세균 오염은 패혈성 쇼크를 유발할 수 있으나, 용혈반응의 주된 원인은 아닙니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "수혈 부작용 중 가장 치명적이며, 주로 '사무적 오류'로 인해 발생합니다."
+            },
+            {
+              "questionNumber": 37,
+              "question": "수혈 중 환자가 오한, 발열, 옆구리 통증, 혈뇨 등을 호소하며 급성용혈수혈반응(AHTR)이 의심될 때, 가장 먼저 즉시 시행해야 할 조치는 무엇입니까?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "해열제와 항히스타민제를 투여하고 수혈을 계속한다.",
+                  "rationale": "용혈반응이 의심될 때 수혈을 계속하는 것은 매우 위험하며, 즉시 중단해야 합니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "수혈 속도를 늦추고 환자 상태를 관찰한다.",
+                  "rationale": "용혈반응은 매우 심각한 반응이므로 속도를 늦추는 것만으로는 불충분하며, 즉시 중단해야 합니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "즉시 수혈을 중지하고, 정맥주입로를 생리식염수로 확보한다.",
+                  "rationale": "AHTR이 의심되면 즉각 수혈을 중단하고, 응급 처치 및 검사를 위한 정맥로를 확보하는 것이 최우선 조치입니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "수혈을 완료한 후 혈액은행에 검사를 의뢰한다.",
+                  "rationale": "수혈을 완료하기 전에 즉시 중단하고 혈액은행(수혈관리실)에 연락해야 합니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "환자에게 부적합한 혈액이 더 이상 들어가지 않도록 하는 것이 가장 중요합니다."
+            },
+            {
+              "questionNumber": 38,
+              "question": "과거 수혈 시 발열성비용혈수혈반응(FNHTR)을 여러 번 경험한 환자에서, 이를 예방하기 위한 가장 효과적인 방법은 무엇입니까?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "세척적혈구(Washed RBC) 사용",
+                  "rationale": "세척적혈구도 발열 반응을 줄일 수 있지만, 백혈구제거 혈액제제가 더 보편적으로 사용됩니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "백혈구제거(Leukocyte-depleted) 혈액제제 사용",
+                  "rationale": "FNHTR의 주원인인 백혈구 성분(또는 여기서 생성된 사이토카인)을 제거한 혈액제제를 사용하여 예방할 수 있습니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "수혈 전 항히스타민제 투여",
+                  "rationale": "항히스타민제는 알레르기 반응 예방에 사용되며, 발열 반응 예방에는 효과가 적습니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "혈액가온기(Blood warmer) 사용",
+                  "rationale": "혈액가온기는 저체온증을 예방하기 위한 것으로, 발열 반응과는 관련이 없습니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "이 반응의 이름(발열성'비용혈')과 그 원인이 되는 혈액 성분을 생각해 보세요."
+            },
+            {
+              "questionNumber": 39,
+              "question": "선천적으로 IgA 결핍증(IgA deficiency)이 있는 환자에게 수혈 시 발생할 위험이 가장 높은 급성수혈반응은 무엇입니까?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "급성용혈수혈반응 (AHTR)",
+                  "rationale": "AHTR은 주로 ABO 부적합에 의해 발생합니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "발열성비용혈수혈반응 (FNHTR)",
+                  "rationale": "FNHTR은 주로 백혈구에 대한 항체에 의해 발생합니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "아나필락시스 반응 (Anaphylactic reaction)",
+                  "rationale": "IgA 결핍 환자는 혈액제제에 포함된 소량의 IgA에 반응하는 anti-IgA 항체를 가지고 있을 수 있으며, 이 항체가 수혈 시 심한 알레르기 반응인 아나필락시스를 유발할 수 있습니다.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "수혈관련급성폐손상 (TRALI)",
+                  "rationale": "TRALI는 주로 공여자의 백혈구 항체 등에 의해 발생합니다.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "이 환자들은 자신에게 없는 IgA라는 단백질에 대한 항체를 가지고 있을 수 있습니다."
+            },
+            {
+              "questionNumber": 40,
+              "question": "수혈 중 또는 수혈 후 6시간 이내에 발생한 급성호흡곤란, 저산소증, 그리고 흉부 X-ray상 양측성 폐침윤 소견을 보이며, 심부전의 증거는 없는 경우 가장 의심해야 할 수혈이상반응은 무엇입니까?",
+              "imageUrl": null,
+              "answerOptions": [
+                {
+                  "text": "급성용혈수혈반응 (AHTR)",
+                  "rationale": "AHTR도 호흡곤란이 올 수 있으나, 주 증상은 용혈로 인한 발열, 통증, 혈뇨 등입니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "알레르기 반응 (Allergic reaction)",
+                  "rationale": "알레르기 반응은 주로 두드러기, 가려움증, 기관지 연축에 의한 호흡곤란이며, 폐침윤은 특징적이지 않습니다.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "수혈관련급성폐손상 (TRALI)",
+                  [cite_start]"rationale": "TRALI는 급성호흡곤란증후군(ARDS)과 유사하게 저산소증, 양측성 폐침윤을 특징으로 하며, 심장 문제(순환량과다)가 원인이 아닌 경우를 말합니다. [cite: 297-303]",
+                  "isCorrect": true
+                },
+                {
+                  "text": "수혈관련순환량과다 (TACO)",
+                  [cite_start]"rationale": "TACO도 호흡곤란과 폐부종(폐침윤)을 보일 수 있으나, 이는 심혈관계의 부담(순환량 과다)으로 인해 발생하며, 좌심방 혈압 증가 소견 등이 동반됩니다. [cite: 308-311]",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "이 반응은 심장 문제가 아닌, 폐 자체의 급성 손상(폐부종)으로 인한 호흡곤란을 유발합니다."
+            }
+          ]
+        };
+
+        // 2. 퀴즈 앱 로직
+        document.addEventListener('DOMContentLoaded', () => {
+            const questions = quizData.questions;
+            let currentQuestionIndex = 0;
+            let score = 0;
+            
+            // DOM 요소
+            const quizContainer = document.getElementById('quiz-container');
+            const quizMain = document.getElementById('quiz-main');
+            const quizFooter = document.getElementById('quiz-footer');
+            const questionTextEl = document.getElementById('question-text');
+            const answerOptionsEl = document.getElementById('answer-options');
+            const feedbackTextEl = document.getElementById('feedback-text');
+            const nextButton = document.getElementById('next-button');
+            const resultsContainer = document.getElementById('results-container');
+            const finalScoreEl = document.getElementById('final-score');
+            const percentageEl = document.getElementById('percentage');
+            const restartButton = document.getElementById('restart-button');
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            const scoreDisplay = document.getElementById('score-display');
+
+            // 퀴즈 시작 함수
+            function startQuiz() {
+                currentQuestionIndex = 0;
+                score = 0;
+                resultsContainer.classList.add('hidden');
+                quizMain.classList.remove('hidden');
+                quizFooter.classList.remove('hidden');
+                loadQuestion();
+            }
+
+            // 질문 로드 함수
+            function loadQuestion() {
+                // 이전 피드백 초기화
+                feedbackTextEl.innerHTML = '';
+                feedbackTextEl.className = 'feedback-text';
+                nextButton.style.display = 'none';
+
+                if (currentQuestionIndex < questions.length) {
+                    const question = questions[currentQuestionIndex];
+                    
+                    // 질문 텍스트 설정
+                    questionTextEl.innerHTML = `${question.questionNumber}. ${question.question}`;
+                    
+                    // 선택지 버튼 생성
+                    answerOptionsEl.innerHTML = '';
+                    question.answerOptions.forEach(option => {
+                        const button = document.createElement('button');
+                        button.innerHTML = option.text; // HTML 태그(지수)를 해석하기 위해 innerHTML 사용
+                        button.classList.add('answer-option');
+                        button.addEventListener('click', () => selectAnswer(option, button));
+                        answerOptionsEl.appendChild(button);
+                    });
+
+                    // 진행 상태 업데이트
+                    updateProgress();
+                } else {
+                    // 퀴즈 종료
+                    showResults();
+                }
+            }
+
+            // 답안 선택 함수
+            function selectAnswer(selectedOption, clickedButton) {
+                // 모든 버튼 비활성화
+                const allButtons = answerOptionsEl.querySelectorAll('.answer-option');
+                allButtons.forEach(btn => btn.disabled = true);
+                
+                let feedbackHTML = '';
+                
+                if (selectedOption.isCorrect) {
+                    score++;
+                    clickedButton.classList.add('correct');
+                    feedbackHTML = `<p class="correct-feedback"><strong>정답입니다!</strong></p>
+                                    <p class="rationale">${selectedOption.rationale}</p>`;
+                } else {
+                    clickedButton.classList.add('incorrect');
+                    feedbackHTML = `<p class="incorrect-feedback"><strong>오답입니다.</strong></p>
+                                    <p class="rationale">${selectedOption.rationale}</p>`;
+                    
+                    // 정답 옵션 찾아서 하이라이트
+                    const correctOptionText = questions[currentQuestionIndex].answerOptions.find(opt => opt.isCorrect).text;
+                    allButtons.forEach(btn => {
+                        if (btn.innerHTML === correctOptionText) {
+                            btn.classList.add('correct');
+                        }
+                    });
+                }
+                
+                feedbackTextEl.innerHTML = feedbackHTML;
+                nextButton.style.display = 'block'; // 다음 문제 버튼 표시
+                updateProgress(); // 점수 표시 업데이트
+            }
+
+            // 진행 상태 업데이트 함수
+            function updateProgress() {
+                const progressPercentage = ((currentQuestionIndex) / questions.length) * 100;
+                progressBar.style.width = `${progressPercentage}%`;
+                progressText.textContent = `문제 ${currentQuestionIndex + 1} / ${questions.length}`;
+                scoreDisplay.textContent = `점수: ${score}`;
+            }
+
+            // 결과 표시 함수
+            function showResults() {
+                quizMain.classList.add('hidden');
+                quizFooter.classList.add('hidden');
+                resultsContainer.classList.remove('hidden');
+
+                const percentage = (score / questions.length) * 100;
+                finalScoreEl.textContent = `${score} / ${questions.length}`;
+                percentageEl.textContent = `정답률: ${percentage.toFixed(1)}%`;
+                
+                // 마지막 문제 진행률 100%로 채우기
+                progressBar.style.width = '100%';
+                progressText.textContent = `퀴즈 완료!`;
+            }
+
+            // 다음 문제 버튼 이벤트
+            nextButton.addEventListener('click', () => {
+                currentQuestionIndex++;
+                loadQuestion();
+            });
+
+            // 다시 풀기 버튼 이벤트
+            restartButton.addEventListener('click', startQuiz);
+
+            // 퀴즈 첫 시작
+            startQuiz();
+        });
+    </script>
+</body>
+</html>
