@@ -38,6 +38,153 @@
             margin-bottom: 40px;
         }
 
+        /* 지휘관-병사 개념 섹션 */
+        .concept-intro {
+            background: white;
+            border-radius: 25px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .concept-title {
+            text-align: center;
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .concept-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 4px solid;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cd4-card {
+            border-color: #ffd700;
+            background: linear-gradient(135deg, #fffacd, #fff9c4);
+        }
+
+        .cd8-card {
+            border-color: #ff6b6b;
+            background: linear-gradient(135deg, #ffe5e5, #ffcdd2);
+        }
+
+        .concept-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+
+        .concept-role {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .concept-description {
+            font-size: 1.2em;
+            line-height: 1.8;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .concept-function {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 4px solid;
+            text-align: left;
+            font-size: 1.1em;
+        }
+
+        .cd4-function {
+            border-color: #ffd700;
+        }
+
+        .cd8-function {
+            border-color: #ff6b6b;
+        }
+
+        .balance-visual {
+            background: linear-gradient(135deg, #d5f4e6, #a8e6cf);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .balance-title {
+            font-size: 2em;
+            color: #27ae60;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .balance-display {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .balance-cell-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .balance-cells {
+            display: flex;
+            gap: 10px;
+        }
+
+        .balance-cell {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .balance-cd4 {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            border: 4px solid #daa520;
+        }
+
+        .balance-cd8 {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            border: 4px solid #c0392b;
+        }
+
+        .balance-label {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #27ae60;
+        }
+
+        .balance-ratio {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #27ae60;
+        }
+
         /* 정상 메커니즘 섹션 */
         .normal-section {
             background: white;
@@ -319,7 +466,7 @@
         }
 
         @media (max-width: 1024px) {
-            .disease-comparison {
+            .disease-comparison, .concept-grid {
                 grid-template-columns: 1fr;
             }
             .step-content {
@@ -340,12 +487,144 @@
             font-size: 1.8em;
             color: #27ae60;
         }
+
+        .metaphor-box {
+            background: linear-gradient(135deg, #fff9e6, #ffe0b2);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 15px;
+            border-left: 5px solid #ff9800;
+            font-style: italic;
+            font-size: 1.15em;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🫁 면역 메커니즘의 이해</h1>
-        <p class="subtitle">정상 CD4-CD8 상호작용과 두 질환의 붕괴 메커니즘</p>
+        <p class="subtitle">CD4-CD8 상호작용: 정상부터 질환까지</p>
+
+        <!-- 지휘관-병사 개념 소개 -->
+        <div class="concept-intro">
+            <h2 class="concept-title">💡 핵심 개념: 지휘관 vs 병사</h2>
+            
+            <div class="concept-grid">
+                <!-- CD4 카드 -->
+                <div class="concept-card cd4-card">
+                    <div class="concept-icon">👨‍✈️</div>
+                    <div class="concept-role">CD4 = 지휘관</div>
+                    <div class="concept-description">
+                        <div class="concept-function cd4-function">
+                            <strong>🎯 주요 임무: 전략 수립 & 명령</strong><br>
+                            • 항원 정보 받기 (대식세포로부터)<br>
+                            • 작전 계획 세우기<br>
+                            • 병사(CD8)에게 명령 하달<br>
+                            • 전장 조율 (사이토카인 분비)
+                        </div>
+                        <div class="metaphor-box">
+                            "전투는 안 하고, 무전기로 명령만 내립니다"
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CD8 카드 -->
+                <div class="concept-card cd8-card">
+                    <div class="concept-icon">🪖</div>
+                    <div class="concept-role">CD8 = 병사</div>
+                    <div class="concept-description">
+                        <div class="concept-function cd8-function">
+                            <strong>⚔️ 주요 임무: 직접 전투</strong><br>
+                            • 지휘관(CD4) 명령 대기<br>
+                            • 목표물 찾기 (감염 세포)<br>
+                            • 직접 공격 (세포독성)<br>
+                            • 적 제거 (Perforin + Granzyme)
+                        </div>
+                        <div class="metaphor-box">
+                            "명령 받으면 칼 들고 직접 싸웁니다"
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 정상 균형 시각화 -->
+            <div class="balance-visual">
+                <div class="balance-title">✅ 정상 상태: 완벽한 균형</div>
+                <div class="balance-display">
+                    <div class="balance-cell-group">
+                        <div class="balance-cells">
+                            <div class="balance-cell balance-cd4">👨‍✈️</div>
+                            <div class="balance-cell balance-cd4">👨‍✈️</div>
+                        </div>
+                        <div class="balance-label">지휘관 (CD4)</div>
+                    </div>
+                    
+                    <div class="balance-ratio">≈</div>
+                    
+                    <div class="balance-cell-group">
+                        <div class="balance-cells">
+                            <div class="balance-cell balance-cd8">🪖</div>
+                            <div class="balance-cell balance-cd8">🪖</div>
+                        </div>
+                        <div class="balance-label">병사 (CD8)</div>
+                    </div>
+                </div>
+                <div style="font-size: 1.5em; font-weight: bold; color: #27ae60; margin-top: 20px;">
+                    CD4/CD8 비율 ≈ 1~2
+                </div>
+                <div style="font-size: 1.2em; margin-top: 15px; line-height: 1.8;">
+                    지휘관이 명령하면 → 병사가 실행<br>
+                    작전 끝나면 → 조절 T세포가 "멈춰!" 명령<br>
+                    <strong style="color: #27ae60;">⚖️ 이것이 건강한 면역!</strong>
+                </div>
+            </div>
+
+            <!-- 질환 미리보기 -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px;">
+                <div style="background: #ffe5e5; padding: 20px; border-radius: 15px; border: 3px solid #e74c3c;">
+                    <h3 style="color: #e74c3c; text-align: center; font-size: 1.5em; margin-bottom: 15px;">
+                        ⚔️ HP (과민성 폐렴)
+                    </h3>
+                    <div style="text-align: center; margin: 20px 0;">
+                        <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 10px;">
+                            <div class="balance-cell balance-cd4" style="width: 40px; height: 40px; font-size: 1.3em;">👨‍✈️</div>
+                        </div>
+                        <div style="font-size: 2em; color: #e74c3c; font-weight: bold;">≪</div>
+                        <div style="display: flex; justify-content: center; gap: 5px; margin-top: 10px;">
+                            <div class="balance-cell balance-cd8" style="width: 35px; height: 35px; font-size: 1.2em;">🪖</div>
+                            <div class="balance-cell balance-cd8" style="width: 35px; height: 35px; font-size: 1.2em;">🪖</div>
+                            <div class="balance-cell balance-cd8" style="width: 35px; height: 35px; font-size: 1.2em;">🪖</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 1.1em; text-align: center; line-height: 1.8;">
+                        <strong style="color: #e74c3c;">병사만 넘쳐남</strong><br>
+                        지휘 없이 난동 부림<br>
+                        💔 "집을 지키려다 집 부숨"
+                    </div>
+                </div>
+
+                <div style="background: #e3f2fd; padding: 20px; border-radius: 15px; border: 3px solid #3498db;">
+                    <h3 style="color: #3498db; text-align: center; font-size: 1.5em; margin-bottom: 15px;">
+                        📋 Sarcoidosis
+                    </h3>
+                    <div style="text-align: center; margin: 20px 0;">
+                        <div style="display: flex; justify-content: center; gap: 5px; margin-bottom: 10px;">
+                            <div class="balance-cell balance-cd4" style="width: 35px; height: 35px; font-size: 1.2em;">👨‍✈️</div>
+                            <div class="balance-cell balance-cd4" style="width: 35px; height: 35px; font-size: 1.2em;">👨‍✈️</div>
+                            <div class="balance-cell balance-cd4" style="width: 35px; height: 35px; font-size: 1.2em;">👨‍✈️</div>
+                        </div>
+                        <div style="font-size: 2em; color: #3498db; font-weight: bold;">≫</div>
+                        <div style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;">
+                            <div class="balance-cell balance-cd8" style="width: 40px; height: 40px; font-size: 1.3em;">🪖</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 1.1em; text-align: center; line-height: 1.8;">
+                        <strong style="color: #3498db;">지휘관만 넘쳐남</strong><br>
+                        회의만 하고 건물만 지음<br>
+                        🏢 "회의실로 집이 꽉 참"
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- 정상 메커니즘 섹션 -->
         <div class="normal-section">
@@ -544,6 +823,9 @@
                                 <small>CD8 과다</small>
                             </div>
                         </div>
+                        <div class="metaphor-box" style="border-color: #e74c3c; background: #ffe5e5;">
+                            💭 "지휘관 없이 병사만 미친듯이 증원되는 상황"
+                        </div>
                     </div>
 
                     <div class="breakdown-step hp-step">
@@ -553,6 +835,9 @@
                         → 감염 세포만이 아니라 <strong>주변 정상 세포</strong>까지 공격<br>
                         → 폐포 상피세포, 간질 조직 <strong>무차별 파괴</strong><br>
                         <span style="color: #e74c3c; font-weight: bold;">= "아군 사격"</span>
+                        <div class="metaphor-box" style="border-color: #e74c3c; background: #ffe5e5;">
+                            💭 "칼 든 병사들이 통제 없이 닥치는 대로 휘두르는 중"
+                        </div>
                     </div>
 
                     <div class="breakdown-step hp-step">
@@ -562,6 +847,9 @@
                         IL-10, TGF-β 신호가 <strong>압도당함</strong><br>
                         → <span style="color: #e74c3c; font-weight: bold;">정상의 Step 5 완전 실패</span><br>
                         → 염증 종료 불가능
+                        <div class="metaphor-box" style="border-color: #e74c3c; background: #ffe5e5;">
+                            💭 "지휘관이 '멈춰!' 외쳐도 병사들이 안 들음"
+                        </div>
                     </div>
 
                     <div class="consequence-box hp-consequence">
@@ -627,6 +915,9 @@
                                 <small>CD8 소수</small>
                             </div>
                         </div>
+                        <div class="metaphor-box" style="border-color: #3498db; background: #e3f2fd;">
+                            💭 "지휘관들끼리 서로를 더 불러모으는 중"
+                        </div>
                     </div>
 
                     <div class="breakdown-step sarc-step">
@@ -637,6 +928,9 @@
                         → 다핵 거대세포 형성<br>
                         → <strong>비건락성 육아종</strong> 형성<br>
                         <span style="color: #3498db; font-weight: bold;">= "처리 못한 항원을 가둬놓는 감옥"</span>
+                        <div class="metaphor-box" style="border-color: #3498db; background: #e3f2fd;">
+                            💭 "지휘관들이 회의실(육아종)을 계속 건설하는 중"
+                        </div>
                     </div>
 
                     <div class="breakdown-step sarc-step">
@@ -647,6 +941,9 @@
                         → 육아종 더 커짐 → 처음으로...<br>
                         <span style="color: #3498db; font-weight: bold;">= 멈출 수 없는 악순환</span><br>
                         Treg가 있어도 <strong>CD4 Th1의 신호가 압도</strong>
+                        <div class="metaphor-box" style="border-color: #3498db; background: #e3f2fd;">
+                            💭 "회의가 회의를 부르고, 본부가 본부를 낳는 중"
+                        </div>
                     </div>
 
                     <div class="consequence-box sarc-consequence">
@@ -705,10 +1002,10 @@
                 <h3 style="font-size: 2em; margin-bottom: 20px;">💡 궁극의 교훈</h3>
                 <p style="font-size: 1.4em; line-height: 2;">
                     정상 면역 = <strong>5단계 완주</strong> (시작 → 실행 → 종료)<br>
-                    HP = <strong>Step 5 실패</strong> (종료 불가 → CD8 폭주)<br>
-                    Sarcoidosis = <strong>Step 2 폭주</strong> (CD4 자가증폭 → 육아종)<br>
+                    HP = <strong>Step 5 실패</strong> (종료 불가 → 병사 폭주)<br>
+                    Sarcoidosis = <strong>Step 2 폭주</strong> (지휘관 자가증폭 → 육아종)<br>
                     <br>
-                    <span style="font-size: 1.6em; font-weight: bold;">⚖️ 균형이 생명이다! 🫁</span>
+                    <span style="font-size: 1.6em; font-weight: bold;">⚖️ 지휘관과 병사의 균형이 생명이다! 🫁</span>
                 </p>
             </div>
         </div>
