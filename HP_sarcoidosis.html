@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HP vs Sarcoidosis: 면역 세포 전쟁</title>
+    <title>면역 균형: 정상 vs HP vs Sarcoidosis</title>
     <style>
         * {
             margin: 0;
@@ -19,14 +19,14 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
         }
 
         h1 {
             text-align: center;
             color: white;
-            font-size: 2.5em;
+            font-size: 2.8em;
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
@@ -34,38 +34,57 @@
         .subtitle {
             text-align: center;
             color: #f0f0f0;
-            font-size: 1.2em;
-            margin-bottom: 30px;
+            font-size: 1.3em;
+            margin-bottom: 40px;
         }
 
-        .comparison {
+        .comparison-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 40px;
         }
 
-        .disease-card {
+        .state-card {
             background: white;
             border-radius: 20px;
             padding: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .disease-card:hover {
-            transform: translateY(-5px);
+        .state-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
         }
 
-        .disease-header {
+        .state-header {
             text-align: center;
             margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid;
         }
 
-        .disease-title {
+        .normal-header {
+            border-color: #27ae60;
+        }
+
+        .hp-header {
+            border-color: #e74c3c;
+        }
+
+        .sarc-header {
+            border-color: #3498db;
+        }
+
+        .state-title {
             font-size: 2em;
             margin-bottom: 10px;
             font-weight: bold;
+        }
+
+        .normal-title {
+            color: #27ae60;
         }
 
         .hp-title {
@@ -76,363 +95,633 @@
             color: #3498db;
         }
 
-        .ratio {
-            font-size: 1.5em;
+        .ratio-badge {
+            font-size: 1.3em;
             padding: 10px 20px;
             border-radius: 10px;
             display: inline-block;
             font-weight: bold;
+            margin-top: 10px;
         }
 
-        .hp-ratio {
+        .normal-badge {
+            background: #d5f4e6;
+            color: #27ae60;
+        }
+
+        .hp-badge {
             background: #ffe5e5;
             color: #c0392b;
         }
 
-        .sarc-ratio {
+        .sarc-badge {
             background: #e3f2fd;
             color: #1565c0;
         }
 
-        .cell-container {
-            display: flex;
-            justify-content: space-around;
-            align-items: flex-end;
-            height: 300px;
-            margin: 30px 0;
-            padding: 20px;
+        /* 면역 반응 시각화 영역 */
+        .immune-diagram {
             background: #f8f9fa;
             border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            min-height: 400px;
             position: relative;
         }
 
-        .cell-group {
+        /* 세포 배치 */
+        .cell-area {
             display: flex;
-            flex-direction: column;
+            justify-content: space-around;
             align-items: center;
-            gap: 10px;
-        }
-
-        .cell-stack {
-            display: flex;
-            flex-direction: column-reverse;
-            gap: 5px;
-            align-items: center;
+            margin: 30px 0;
+            position: relative;
         }
 
         .cell {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5em;
-            animation: popIn 0.5s ease;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            font-size: 1.8em;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            position: relative;
+            animation: pulse 2s ease-in-out infinite;
         }
 
-        @keyframes popIn {
-            0% {
-                transform: scale(0);
-                opacity: 0;
-            }
-            50% {
-                transform: scale(1.1);
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .cd4-cell {
             background: linear-gradient(135deg, #ffd700, #ffed4e);
-            border: 3px solid #daa520;
+            border: 4px solid #daa520;
         }
 
         .cd8-cell {
             background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
-            border: 3px solid #c0392b;
+            border: 4px solid #c0392b;
         }
 
-        .cell-label {
-            font-weight: bold;
-            font-size: 1.1em;
-            margin-top: 10px;
+        .macrophage {
+            background: linear-gradient(135deg, #95a5a6, #bdc3c7);
+            border: 4px solid #7f8c8d;
+            width: 70px;
+            height: 70px;
         }
 
-        .scenario {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px 0;
-            border-left: 5px solid;
+        .antigen {
+            background: linear-gradient(135deg, #8e44ad, #9b59b6);
+            border: 4px solid #6c3483;
+            width: 50px;
+            height: 50px;
+            animation: float 3s ease-in-out infinite;
         }
 
-        .hp-scenario {
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* 화살표 및 신호 */
+        .signal {
+            position: absolute;
+            font-size: 2em;
+            animation: blink 1.5s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* 프로세스 플로우 */
+        .process-flow {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid;
+        }
+
+        .normal-flow {
+            border-color: #27ae60;
+        }
+
+        .hp-flow {
             border-color: #e74c3c;
         }
 
-        .sarc-scenario {
+        .sarc-flow {
             border-color: #3498db;
         }
 
-        .scenario-title {
-            font-size: 1.5em;
+        .flow-step {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            font-size: 1.05em;
+        }
+
+        .flow-arrow {
+            margin: 0 10px;
+            color: #7f8c8d;
             font-weight: bold;
-            margin-bottom: 15px;
+        }
+
+        /* 결과 박스 */
+        .outcome {
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            border: 3px solid;
+        }
+
+        .normal-outcome {
+            border-color: #27ae60;
+        }
+
+        .hp-outcome {
+            border-color: #e74c3c;
+        }
+
+        .sarc-outcome {
+            border-color: #3498db;
+        }
+
+        .outcome-title {
+            font-weight: bold;
+            font-size: 1.3em;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .scenario-content {
-            font-size: 1.1em;
+        .outcome-content {
             line-height: 1.8;
         }
 
-        .problem-list {
-            margin-top: 15px;
+        /* 육아종 시각화 */
+        .granuloma {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #e8f5e9, #a5d6a7);
+            border: 5px dashed #66bb6a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin: 20px auto;
+            position: relative;
+            animation: grow 3s ease-in-out infinite;
         }
 
-        .problem-item {
-            padding: 10px;
-            margin: 8px 0;
-            background: white;
-            border-radius: 8px;
+        @keyframes grow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .granuloma-cells {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            justify-content: center;
+        }
+
+        .granuloma-cell {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #ffd700;
+            border: 2px solid #daa520;
+        }
+
+        /* 파괴 효과 */
+        .destruction {
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .tissue {
+            width: 100%;
+            height: 60px;
+            background: linear-gradient(90deg, #e8f5e9, #c8e6c9);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .damage {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: repeating-linear-gradient(
+                45deg,
+                #ffcdd2,
+                #ffcdd2 10px,
+                #ef5350 10px,
+                #ef5350 20px
+            );
+            animation: spread 4s ease-in-out infinite;
+        }
+
+        @keyframes spread {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 0%; }
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
             display: flex;
             align-items: center;
             gap: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-weight: 600;
         }
 
-        .comparison-table {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 2px solid #ecf0f1;
-        }
-
-        th {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-size: 1.2em;
-        }
-
-        tr:hover {
-            background: #f8f9fa;
-        }
-
-        .hp-col {
-            color: #e74c3c;
-            font-weight: bold;
-        }
-
-        .sarc-col {
-            color: #3498db;
-            font-weight: bold;
-        }
-
-        .icon {
-            font-size: 1.5em;
-        }
-
-        @media (max-width: 968px) {
-            .comparison {
+        @media (max-width: 1200px) {
+            .comparison-grid {
                 grid-template-columns: 1fr;
             }
+        }
+
+        /* 세포 그룹 */
+        .cell-cluster {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .cell-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .mini-cell {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1em;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🫁 폐라는 왕국의 두 가지 위기</h1>
-        <p class="subtitle">HP vs Sarcoidosis: 면역 세포 균형의 중요성</p>
+        <h1>🫁 면역 균형의 3가지 시나리오</h1>
+        <p class="subtitle">정상 vs 과민성 폐렴 vs 사르코이도시스</p>
 
-        <div class="comparison">
-            <!-- HP Card -->
-            <div class="disease-card">
-                <div class="disease-header">
-                    <h2 class="disease-title hp-title">⚔️ HP (과민성 폐렴)</h2>
-                    <div class="ratio hp-ratio">CD4/CD8 < 1</div>
+        <!-- 범례 -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="cell cd4-cell" style="width: 40px; height: 40px; font-size: 1.2em;">👨‍✈️</div>
+                <span>CD4 지휘관</span>
+            </div>
+            <div class="legend-item">
+                <div class="cell cd8-cell" style="width: 40px; height: 40px; font-size: 1.2em;">🪖</div>
+                <span>CD8 병사</span>
+            </div>
+            <div class="legend-item">
+                <div class="cell macrophage" style="width: 40px; height: 40px; font-size: 1.2em;">🦠</div>
+                <span>대식세포</span>
+            </div>
+            <div class="legend-item">
+                <div class="cell antigen" style="width: 40px; height: 40px; font-size: 1.2em;">☠️</div>
+                <span>항원</span>
+            </div>
+        </div>
+
+        <div class="comparison-grid">
+            <!-- 정상 상태 -->
+            <div class="state-card">
+                <div class="state-header normal-header">
+                    <h2 class="state-title normal-title">✅ 정상 상태</h2>
+                    <div class="ratio-badge normal-badge">CD4/CD8 ≈ 1~2</div>
                 </div>
 
-                <div class="cell-container">
-                    <div class="cell-group">
-                        <div class="cell-stack">
-                            <div class="cd4-cell cell">👨‍✈️</div>
-                            <div class="cd4-cell cell" style="animation-delay: 0.1s">👨‍✈️</div>
+                <div class="immune-diagram">
+                    <h3 style="text-align: center; color: #27ae60; margin-bottom: 20px;">⚖️ 완벽한 균형</h3>
+                    
+                    <div class="cell-area">
+                        <div class="cell-cluster">
+                            <div class="cell cd4-cell">👨‍✈️</div>
+                            <span style="font-weight: bold; color: #27ae60;">CD4</span>
                         </div>
-                        <div class="cell-label" style="color: #daa520;">CD4 지휘관</div>
+
+                        <div style="font-size: 2em;">↔️</div>
+
+                        <div class="cell-cluster">
+                            <div class="cell cd8-cell">🪖</div>
+                            <span style="font-weight: bold; color: #27ae60;">CD8</span>
+                        </div>
+
+                        <div style="font-size: 2em;">→</div>
+
+                        <div class="cell-cluster">
+                            <div class="cell macrophage">🦠</div>
+                            <span style="font-weight: bold; color: #27ae60;">대식세포</span>
+                        </div>
                     </div>
 
-                    <div class="cell-group">
-                        <div class="cell-stack">
-                            <div class="cd8-cell cell">🪖</div>
-                            <div class="cd8-cell cell" style="animation-delay: 0.1s">🪖</div>
-                            <div class="cd8-cell cell" style="animation-delay: 0.2s">🪖</div>
-                            <div class="cd8-cell cell" style="animation-delay: 0.3s">🪖</div>
-                            <div class="cd8-cell cell" style="animation-delay: 0.4s">🪖</div>
-                            <div class="cd8-cell cell" style="animation-delay: 0.5s">🪖</div>
+                    <div class="process-flow normal-flow">
+                        <div class="flow-step">
+                            <span>1️⃣ 항원 침입</span>
+                            <span class="flow-arrow">→</span>
+                            <span>대식세포가 인식</span>
                         </div>
-                        <div class="cell-label" style="color: #c0392b;">CD8 병사</div>
+                        <div class="flow-step">
+                            <span>2️⃣ CD4 지휘관</span>
+                            <span class="flow-arrow">→</span>
+                            <span>"작전 개시!" 명령</span>
+                        </div>
+                        <div class="flow-step">
+                            <span>3️⃣ CD8 병사</span>
+                            <span class="flow-arrow">→</span>
+                            <span>감염된 세포 제거</span>
+                        </div>
+                        <div class="flow-step">
+                            <span>4️⃣ 대식세포</span>
+                            <span class="flow-arrow">→</span>
+                            <span>잔해 청소</span>
+                        </div>
+                        <div class="flow-step">
+                            <span>5️⃣ CD4 Treg</span>
+                            <span class="flow-arrow">→</span>
+                            <span><strong>"작전 종료!"</strong> 신호</span>
+                        </div>
+                    </div>
+
+                    <div class="outcome normal-outcome">
+                        <div class="outcome-title">
+                            <span>🎯</span>
+                            <span>결과: 완벽한 해결</span>
+                        </div>
+                        <div class="outcome-content">
+                            ✅ 항원 제거 완료<br>
+                            ✅ 조직 손상 최소화<br>
+                            ✅ 염증 신속 종료<br>
+                            ✅ 정상 치유 과정<br>
+                            <strong style="color: #27ae60;">→ 건강한 폐 유지! 🫁</strong>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="scenario hp-scenario">
-                    <div class="scenario-title">
-                        <span class="icon">💥</span>
-                        <span>총력전 상황</span>
-                    </div>
-                    <div class="scenario-content">
-                        적(새 깃털, 곰팡이)이 <strong>매일매일</strong> 침입!<br>
-                        병사들이 <strong>난폭하게</strong> 반격하며 성벽도 함께 파괴
-                    </div>
-                    <div class="problem-list">
-                        <div class="problem-item">
-                            <span>❌</span>
-                            <span>모기 한 마리에 수류탄 (과잉 방어)</span>
+            <!-- HP -->
+            <div class="state-card">
+                <div class="state-header hp-header">
+                    <h2 class="state-title hp-title">⚔️ HP (과민성 폐렴)</h2>
+                    <div class="ratio-badge hp-badge">CD4/CD8 < 1</div>
+                </div>
+
+                <div class="immune-diagram">
+                    <h3 style="text-align: center; color: #e74c3c; margin-bottom: 20px;">💥 병사 폭주</h3>
+                    
+                    <div class="cell-area">
+                        <div class="cell-cluster">
+                            <div class="cell cd4-cell">👨‍✈️</div>
+                            <span style="font-weight: bold; color: #c0392b;">CD4 (소수)</span>
                         </div>
-                        <div class="problem-item">
+
+                        <div style="font-size: 2em; color: #e74c3c;">⚠️</div>
+
+                        <div class="cell-cluster">
+                            <div class="cell-row">
+                                <div class="mini-cell cd8-cell">🪖</div>
+                                <div class="mini-cell cd8-cell">🪖</div>
+                                <div class="mini-cell cd8-cell">🪖</div>
+                            </div>
+                            <div class="cell-row">
+                                <div class="mini-cell cd8-cell">🪖</div>
+                                <div class="mini-cell cd8-cell">🪖</div>
+                                <div class="mini-cell cd8-cell">🪖</div>
+                            </div>
+                            <span style="font-weight: bold; color: #c0392b;">CD8 (과다)</span>
+                        </div>
+
+                        <div class="cell-cluster">
+                            <div class="cell-row">
+                                <div class="mini-cell antigen">☠️</div>
+                                <div class="mini-cell antigen">☠️</div>
+                            </div>
+                            <span style="font-weight: bold; color: #8e44ad;">반복 노출</span>
+                        </div>
+                    </div>
+
+                    <div class="process-flow hp-flow">
+                        <div class="flow-step">
+                            <span>1️⃣ 항원 매일 침입</span>
+                            <span class="flow-arrow" style="color: #e74c3c;">⚠️</span>
+                            <span>(새, 곰팡이)</span>
+                        </div>
+                        <div class="flow-step">
+                            <span>2️⃣ CD8 대량 동원</span>
+                            <span class="flow-arrow" style="color: #e74c3c;">→</span>
+                            <span>세포독성 공격 시작</span>
+                        </div>
+                        <div class="flow-step">
+                            <span>3️⃣ 폐포 상피세포</span>
+                            <span class="flow-arrow" style="color: #e74c3c;">💥</span>
+                            <span><strong>직접 파괴</strong></span>
+                        </div>
+                        <div class="flow-step">
+                            <span>4️⃣ CD4 조절 실패</span>
+                            <span class="flow-arrow" style="color: #e74c3c;">❌</span>
+                            <span>"멈춰!" 신호 안 먹힘</span>
+                        </div>
+                        <div class="flow-step">
+                            <span>5️⃣ 반복 손상</span>
+                            <span class="flow-arrow" style="color: #e74c3c;">→</span>
+                            <span><strong>섬유화</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="destruction">
+                        <div style="text-align: center; margin-bottom: 10px; font-weight: bold; color: #e74c3c;">
+                            🫁 폐 조직 파괴 진행 중...
+                        </div>
+                        <div class="tissue">
+                            <div class="damage" style="width: 60%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="outcome hp-outcome">
+                        <div class="outcome-title">
                             <span>💔</span>
-                            <span>아군 피해: 폐포·간질 조직 파괴</span>
+                            <span>결과: 과잉 공격</span>
                         </div>
-                        <div class="problem-item">
-                            <span>♾️</span>
-                            <span>끝없는 전쟁 → 섬유화</span>
+                        <div class="outcome-content">
+                            ❌ 간질 염증 지속<br>
+                            ❌ 폐포 세포 직접 파괴<br>
+                            ❌ 염증 종료 불가<br>
+                            ❌ 치유 과정 → 섬유화<br>
+                            <strong style="color: #e74c3c;">→ "집 지키려다 집 부숨" 🏚️</strong>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Sarcoidosis Card -->
-            <div class="disease-card">
-                <div class="disease-header">
-                    <h2 class="disease-title sarc-title">📋 Sarcoidosis</h2>
-                    <div class="ratio sarc-ratio">CD4/CD8 > 3.5</div>
+            <!-- Sarcoidosis -->
+            <div class="state-card">
+                <div class="state-header sarc-header">
+                    <h2 class="state-title sarc-title">📋 Sarcoidosis</h2>
+                    <div class="ratio-badge sarc-badge">CD4/CD8 > 3.5</div>
                 </div>
 
-                <div class="cell-container">
-                    <div class="cell-group">
-                        <div class="cell-stack">
-                            <div class="cd4-cell cell">👨‍✈️</div>
-                            <div class="cd4-cell cell" style="animation-delay: 0.1s">👨‍✈️</div>
-                            <div class="cd4-cell cell" style="animation-delay: 0.2s">👨‍✈️</div>
-                            <div class="cd4-cell cell" style="animation-delay: 0.3s">👨‍✈️</div>
-                            <div class="cd4-cell cell" style="animation-delay: 0.4s">👨‍✈️</div>
-                            <div class="cd4-cell cell" style="animation-delay: 0.5s">👨‍✈️</div>
-                            <div class="cd4-cell cell" style="animation-delay: 0.6s">👨‍✈️</div>
+                <div class="immune-diagram">
+                    <h3 style="text-align: center; color: #3498db; margin-bottom: 20px;">🏢 지휘관 과잉</h3>
+                    
+                    <div class="cell-area">
+                        <div class="cell-cluster">
+                            <div class="cell-row">
+                                <div class="mini-cell cd4-cell">👨‍✈️</div>
+                                <div class="mini-cell cd4-cell">👨‍✈️</div>
+                                <div class="mini-cell cd4-cell">👨‍✈️</div>
+                            </div>
+                            <div class="cell-row">
+                                <div class="mini-cell cd4-cell">👨‍✈️</div>
+                                <div class="mini-cell cd4-cell">👨‍✈️</div>
+                                <div class="mini-cell cd4-cell">👨‍✈️</div>
+                            </div>
+                            <span style="font-weight: bold; color: #2980b9;">CD4 (과다)</span>
                         </div>
-                        <div class="cell-label" style="color: #daa520;">CD4 지휘관</div>
+
+                        <div style="font-size: 2em; color: #3498db;">⚠️</div>
+
+                        <div class="cell-cluster">
+                            <div class="cell cd8-cell">🪖</div>
+                            <span style="font-weight: bold; color: #2980b9;">CD8 (소수)</span>
+                        </div>
+
+                        <div class="cell-cluster">
+                            <div class="cell antigen">❓</div>
+                            <span style="font-weight: bold; color: #8e44ad;">불명 항원</span>
+                        </div>
                     </div>
 
-                    <div class="cell-group">
-                        <div class="cell-stack">
-                            <div class="cd8-cell cell">🪖</div>
-                            <div class="cd8-cell cell" style="animation-delay: 0.1s">🪖</div>
+                    <div class="process-flow sarc-flow">
+                        <div class="flow-step">
+                            <span>1️⃣ 정체불명 항원</span>
+                            <span class="flow-arrow" style="color: #3498db;">?</span>
+                            <span>뭔지 모름</span>
                         </div>
-                        <div class="cell-label" style="color: #c0392b;">CD8 병사</div>
+                        <div class="flow-step">
+                            <span>2️⃣ CD4 Th1 과활성</span>
+                            <span class="flow-arrow" style="color: #3498db;">→</span>
+                            <span>IFN-γ, TNF-α ↑↑↑</span>
+                        </div>
+                        <div class="flow-step">
+                            <span>3️⃣ 대식세포 과자극</span>
+                            <span class="flow-arrow" style="color: #3498db;">→</span>
+                            <span>상피모양세포로 변형</span>
+                        </div>
+                        <div class="flow-step">
+                            <span>4️⃣ 육아종 형성</span>
+                            <span class="flow-arrow" style="color: #3498db;">🏗️</span>
+                            <span><strong>"항원 가두기"</strong></span>
+                        </div>
+                        <div class="flow-step">
+                            <span>5️⃣ 양성 피드백</span>
+                            <span class="flow-arrow" style="color: #3498db;">↻</span>
+                            <span>CD4 자가 증폭</span>
+                        </div>
                     </div>
-                </div>
 
-                <div class="scenario sarc-scenario">
-                    <div class="scenario-title">
-                        <span class="icon">🏢</span>
-                        <span>관료주의 과잉</span>
+                    <div class="granuloma">
+                        <div style="font-weight: bold; margin-bottom: 10px; color: #27ae60;">육아종</div>
+                        <div class="granuloma-cells">
+                            <div class="granuloma-cell"></div>
+                            <div class="granuloma-cell"></div>
+                            <div class="granuloma-cell"></div>
+                            <div class="granuloma-cell"></div>
+                            <div class="granuloma-cell"></div>
+                            <div class="granuloma-cell"></div>
+                        </div>
+                        <div style="font-size: 0.9em; margin-top: 10px; color: #666;">계속 증식 중...</div>
                     </div>
-                    <div class="scenario-content">
-                        적은 누군지도 모르는데, 지휘관들만 <strong>회의</strong>!<br>
-                        여기저기 <strong>작전 본부(육아종)</strong>만 건설
-                    </div>
-                    <div class="problem-list">
-                        <div class="problem-item">
+
+                    <div class="outcome sarc-outcome">
+                        <div class="outcome-title">
                             <span>🏗️</span>
-                            <span>공간 낭비: 회의실이 폐를 가득 채움</span>
+                            <span>결과: 조직 점령</span>
                         </div>
-                        <div class="problem-item">
-                            <span>📊</span>
-                            <span>비효율: 회의만 하고 실제 방어 안 함</span>
-                        </div>
-                        <div class="problem-item">
-                            <span>🧱</span>
-                            <span>본부 건물이 굳어버림 → 섬유화</span>
+                        <div class="outcome-content">
+                            ❌ 육아종이 폐 공간 차지<br>
+                            ❌ 만성 염증 지속 (사이토카인 ↑)<br>
+                            ❌ 조절 T세포 기능 상실<br>
+                            ❌ 육아종 → 섬유화<br>
+                            <strong style="color: #3498db;">→ "회의실로 집이 꽉 참" 🏢</strong>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Comparison Table -->
-        <div class="comparison-table">
-            <h2 style="text-align: center; margin-bottom: 25px; font-size: 2em;">🎯 한눈에 비교</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>특징</th>
-                        <th class="hp-col">HP (과민성 폐렴)</th>
-                        <th class="sarc-col">Sarcoidosis</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>🎭 상황</strong></td>
-                        <td class="hp-col">총력전 / 아수라장</td>
-                        <td class="sarc-col">관료주의 / 회의실</td>
-                    </tr>
-                    <tr>
-                        <td><strong>👥 인원 구성</strong></td>
-                        <td class="hp-col">병사(CD8) 넘침 ↑↑↑</td>
-                        <td class="sarc-col">지휘관(CD4) 넘침 ↑↑↑</td>
-                    </tr>
-                    <tr>
-                        <td><strong>🔥 분위기</strong></td>
-                        <td class="hp-col">패닉 상태 공격</td>
-                        <td class="sarc-col">조직적 회의</td>
-                    </tr>
-                    <tr>
-                        <td><strong>💥 손상 방식</strong></td>
-                        <td class="hp-col">폭격으로 폐허화</td>
-                        <td class="sarc-col">건물로 공간 점령</td>
-                    </tr>
-                    <tr>
-                        <td><strong>🎯 적(항원)</strong></td>
-                        <td class="hp-col">명확 (새, 곰팡이)</td>
-                        <td class="sarc-col">불명확 (???)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>🔬 병리</strong></td>
-                        <td class="hp-col">간질 염증 + 세포 파괴</td>
-                        <td class="sarc-col">비건락성 육아종</td>
-                    </tr>
-                    <tr>
-                        <td><strong>💊 해결책</strong></td>
-                        <td class="hp-col">항원 회피 + 스테로이드</td>
-                        <td class="sarc-col">관찰 또는 스테로이드</td>
-                    </tr>
-                    <tr>
-                        <td><strong>💭 한마디로</strong></td>
-                        <td class="hp-col">"집 지키려다 집 부숨"</td>
-                        <td class="sarc-col">"회의실로 집이 꽉 참"</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <!-- 핵심 요약 -->
+        <div style="background: white; border-radius: 20px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+            <h2 style="text-align: center; font-size: 2.2em; margin-bottom: 30px; color: #2c3e50;">🎯 핵심 비교</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px;">
+                <div style="text-align: center;">
+                    <div style="font-size: 3em; margin-bottom: 15px;">✅</div>
+                    <h3 style="color: #27ae60; margin-bottom: 15px;">정상</h3>
+                    <div style="line-height: 1.8;">
+                        <strong>균형 잡힌 협력</strong><br>
+                        CD4가 지휘 → CD8이 실행<br>
+                        적절한 공격 → 신속한 종료<br>
+                        <span style="color: #27ae60; font-weight: bold;">조직 보존 ✓</span>
+                    </div>
+                </div>
 
-        <div style="text-align: center; color: white; margin-top: 30px; font-size: 1.2em; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 15px;">
-            <strong>💡 핵심 교훈:</strong> 면역계는 <strong>밸런스</strong>가 생명!<br>
-            CD4(지휘관)와 CD8(병사)의 <strong>적절한 비율</strong>이 건강한 폐를 만듭니다! 🫁✨
+                <div style="text-align: center;">
+                    <div style="font-size: 3em; margin-bottom: 15px;">⚔️</div>
+                    <h3 style="color: #e74c3c; margin-bottom: 15px;">HP</h3>
+                    <div style="line-height: 1.8;">
+                        <strong>병사의 난동</strong><br>
+                        CD8 폭주 → 직접 파괴<br>
+                        반복 공격 → 종료 불가<br>
+                        <span style="color: #e74c3c; font-weight: bold;">아군 피해 ✗</span>
+                    </div>
+                </div>
+
+                <div style="text-align: center;">
+                    <div style="font-size: 3em; margin-bottom: 15px;">📋</div>
+                    <h3 style="color: #3498db; margin-bottom: 15px;">Sarcoidosis</h3>
+                    <div style="line-height: 1.8;">
+                        <strong>관료의 회의</strong><br>
+                        CD4 과잉 → 육아종 건설<br>
+                        만성 염증 → 종료 불가<br>
+                        <span style="color: #3498db; font-weight: bold;">공간 점령 ✗</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; padding: 25px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; color: white; text-align: center;">
+                <h3 style="font-size: 1.8em; margin-bottom: 15px;">💡 궁극의 교훈</h3>
+                <p style="font-size: 1.3em; line-height: 1.8;">
+                    면역계는 <strong>밸런스</strong>가 생명!<br>
+                    너무 많아도, 너무 적어도 문제!<br>
+                    CD4(지휘)와 CD8(실행)의 <strong>황금 비율</strong>이 건강을 지킵니다! 🫁✨
+                </p>
+            </div>
         </div>
     </div>
 </body>
