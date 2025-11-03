@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WPW 델타파 생성 메커니즘</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .heart-section, .ecg-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #e0e0e0;
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #34495e;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+        }
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            margin: 0 10px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .legend {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        .legend-item {
+            display: inline-block;
+            margin: 10px 20px;
+            font-size: 16px;
+        }
+        .legend-color {
+            display: inline-block;
+            width: 30px;
+            height: 20px;
+            margin-right: 8px;
+            border-radius: 4px;
+            vertical-align: middle;
+            border: 1px solid #ccc;
+        }
+        .phase-description {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 4px solid #2196F3;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .comparison-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #e0e0e0;
+        }
+        .comparison-title {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .normal {
+            border-color: #4CAF50;
+        }
+        .wpw {
+            border-color: #f44336;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ WPW 증후군: 델타파 생성 메커니즘 ⚡</h1>
+        
+        <div class="controls">
+            <button id="playPauseBtn" onclick="togglePlayPause()">▶️ 시작</button>
+            <button onclick="resetAnimation()">🔄 리셋</button>
+        </div>
+
+        <div class="main-content">
+            <div class="heart-section">
+                <div class="section-title">💓 심장 전기 전도</div>
+                <canvas id="heartCanvas" width="500" height="500"></canvas>
+            </div>
+            
+            <div class="ecg-section">
+                <div class="section-title">📈 심전도 (ECG)</div>
+                <canvas id="ecgCanvas" width="500" height="500"></canvas>
+            </div>
+        </div>
+
+        <div class="phase-description" id="phaseDescription">
+            애니메이션을 시작하여 WPW에서 델타파가 생성되는 과정을 확인하세요.
+        </div>
+
+        <div class="legend">
+            <div class="section-title">범례</div>
+            <div class="legend-item">
+                <span class="legend-color" style="background: #ff6b6b;"></span>
+                부전도로 (Kent Bundle)
+            </div>
+            <div class="legend-item">
+                <span class="legend-color" style="background: #4ecdc4;"></span>
+                정상 전도로 (AV Node)
+            </div>
+            <div class="legend-item">
+                <span class="legend-color" style="background: #ffe66d;"></span>
+                조기 흥분 영역
+            </div>
+            <div class="legend-item">
+                <span class="legend-color" style="background: #ff6b6b;"></span>
+                델타파
+            </div>
+            <div class="legend-item">
+                <span class="legend-color" style="background: #95e1d3;"></span>
+                정상 QRS
+            </div>
+        </div>
+
+        <div class="comparison">
+            <div class="comparison-box normal">
+                <div class="comparison-title">✅ 정상 심전도</div>
+                <canvas id="normalECG" width="320" height="200"></canvas>
+            </div>
+            <div class="comparison-box wpw">
+                <div class="comparison-title">⚠️ WPW 심전도</div>
+                <canvas id="wpwECG" width="320" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const heartCanvas = document.getElementById('heartCanvas');
+        const heartCtx = heartCanvas.getContext('2d');
+        const ecgCanvas = document.getElementById('ecgCanvas');
+        const ecgCtx = ecgCanvas.getContext('2d');
+        
+        let animationFrame = 0;
+        let isAnimating = false;
+        let animationId = null;
+
+        const phases = [
+            "1️⃣ 동결절(SA node)에서 전기 신호 발생",
+            "2️⃣ 심방 탈분극 - P파 생성",
+            "3️⃣ 부전도로를 통한 조기 심실 흥분 시작 (델타파 시작!)",
+            "4️⃣ 정상 전도로(AV node)를 통한 지연된 전도",
+            "5️⃣ 두 경로가 합쳐져 심실 전체 탈분극 - 넓어진 QRS 완성",
+            "6️⃣ 심실 재분극 - T파 생성"
+        ];
+
+        function drawHeart(frame) {
+            heartCtx.clearRect(0, 0, heartCanvas.width, heartCanvas.height);
+            
+            const centerX = 250;
+            const centerY = 250;
+            
+            // 심방 (Atria)
+            heartCtx.fillStyle = '#ffeaa7';
+            heartCtx.beginPath();
+            heartCtx.ellipse(centerX, centerY - 100, 120, 80, 0, 0, Math.PI * 2);
+            heartCtx.fill();
+            heartCtx.strokeStyle = '#2c3e50';
+            heartCtx.lineWidth = 2;
+            heartCtx.stroke();
+            
+            // 심실 (Ventricles)
+            heartCtx.fillStyle = '#fab1a0';
+            heartCtx.beginPath();
+            heartCtx.ellipse(centerX, centerY + 80, 140, 120, 0, 0, Math.PI * 2);
+            heartCtx.fill();
+            heartCtx.stroke();
+            
+            // SA Node
+            if (frame >= 0) {
+                heartCtx.fillStyle = frame < 30 ? '#e74c3c' : '#c0392b';
+                heartCtx.beginPath();
+                heartCtx.arc(centerX + 60, centerY - 120, 10, 0, Math.PI * 2);
+                heartCtx.fill();
+                heartCtx.fillStyle = '#2c3e50';
+                heartCtx.font = 'bold 12px Arial';
+                heartCtx.fillText('SA Node', centerX + 75, centerY - 115);
+            }
+            
+            // AV Node (정상 전도로)
+            heartCtx.fillStyle = '#4ecdc4';
+            heartCtx.beginPath();
+            heartCtx.arc(centerX, centerY, 12, 0, Math.PI * 2);
+            heartCtx.fill();
+            heartCtx.strokeStyle = '#2c3e50';
+            heartCtx.lineWidth = 2;
+            heartCtx.stroke();
+            heartCtx.fillStyle = '#2c3e50';
+            heartCtx.font = 'bold 12px Arial';
+            heartCtx.fillText('AV Node', centerX + 20, centerY + 5);
+            
+            // Kent Bundle (부전도로) - 빨간색 번개 모양
+            heartCtx.strokeStyle = '#ff6b6b';
+            heartCtx.lineWidth = 4;
+            heartCtx.beginPath();
+            heartCtx.moveTo(centerX - 80, centerY - 50);
+            heartCtx.lineTo(centerX - 90, centerY + 20);
+            heartCtx.lineTo(centerX - 70, centerY + 25);
+            heartCtx.lineTo(centerX - 80, centerY + 60);
+            heartCtx.stroke();
+            heartCtx.fillStyle = '#2c3e50';
+            heartCtx.font = 'bold 12px Arial';
+            heartCtx.fillText('Kent Bundle', centerX - 150, centerY + 10);
+            heartCtx.fillText('(부전도로)', centerX - 150, centerY + 25);
+            
+            // 심방 흥분 (P wave)
+            if (frame >= 10 && frame < 40) {
+                heartCtx.fillStyle = 'rgba(255, 107, 107, 0.3)';
+                heartCtx.beginPath();
+                heartCtx.ellipse(centerX, centerY - 100, 120, 80, 0, 0, Math.PI * 2);
+                heartCtx.fill();
+            }
+            
+            // 부전도로를 통한 조기 심실 흥분 (델타파 구간)
+            if (frame >= 40 && frame < 80) {
+                const progress = (frame - 40) / 40;
+                heartCtx.fillStyle = 'rgba(255, 230, 109, 0.6)';
+                heartCtx.beginPath();
+                heartCtx.arc(centerX - 80, centerY + 60, 40 * progress, 0, Math.PI * 2);
+                heartCtx.fill();
+                
+                // 화살표로 전도 방향 표시
+                heartCtx.strokeStyle = '#ff6b6b';
+                heartCtx.lineWidth = 3;
+                heartCtx.beginPath();
+                heartCtx.moveTo(centerX - 80, centerY - 20);
+                heartCtx.lineTo(centerX - 80, centerY + 20 * progress);
+                heartCtx.stroke();
+                // 화살표 머리
+                heartCtx.beginPath();
+                heartCtx.moveTo(centerX - 80, centerY + 20 * progress);
+                heartCtx.lineTo(centerX - 85, centerY + 20 * progress - 10);
+                heartCtx.moveTo(centerX - 80, centerY + 20 * progress);
+                heartCtx.lineTo(centerX - 75, centerY + 20 * progress - 10);
+                heartCtx.stroke();
+            }
+            
+            // 정상 전도로를 통한 심실 흥분
+            if (frame >= 60 && frame < 100) {
+                const progress = (frame - 60) / 40;
+                heartCtx.fillStyle = 'rgba(149, 225, 211, 0.6)';
+                heartCtx.beginPath();
+                heartCtx.ellipse(centerX, centerY + 80, 140 * progress, 120 * progress, 0, 0, Math.PI * 2);
+                heartCtx.fill();
+                
+                // 정상 전도 화살표
+                heartCtx.strokeStyle = '#4ecdc4';
+                heartCtx.lineWidth = 3;
+                heartCtx.beginPath();
+                heartCtx.moveTo(centerX, centerY + 10);
+                heartCtx.lineTo(centerX, centerY + 50 * progress);
+                heartCtx.stroke();
+            }
+            
+            // 완전한 심실 탈분극
+            if (frame >= 100 && frame < 130) {
+                heartCtx.fillStyle = 'rgba(46, 213, 115, 0.4)';
+                heartCtx.beginPath();
+                heartCtx.ellipse(centerX, centerY + 80, 140, 120, 0, 0, Math.PI * 2);
+                heartCtx.fill();
+            }
+        }
+
+        function drawECG(frame) {
+            ecgCtx.clearRect(0, 0, ecgCanvas.width, ecgCanvas.height);
+            
+            // 배경 격자
+            ecgCtx.strokeStyle = '#ffe6e6';
+            ecgCtx.lineWidth = 1;
+            for (let i = 0; i < ecgCanvas.width; i += 20) {
+                ecgCtx.beginPath();
+                ecgCtx.moveTo(i, 0);
+                ecgCtx.lineTo(i, ecgCanvas.height);
+                ecgCtx.stroke();
+            }
+            for (let i = 0; i < ecgCanvas.height; i += 20) {
+                ecgCtx.beginPath();
+                ecgCtx.moveTo(0, i);
+                ecgCtx.lineTo(ecgCanvas.width, i);
+                ecgCtx.stroke();
+            }
+            
+            // 기준선
+            const baseline = 250;
+            ecgCtx.strokeStyle = '#95a5a6';
+            ecgCtx.lineWidth = 2;
+            ecgCtx.setLineDash([5, 5]);
+            ecgCtx.beginPath();
+            ecgCtx.moveTo(0, baseline);
+            ecgCtx.lineTo(ecgCanvas.width, baseline);
+            ecgCtx.stroke();
+            ecgCtx.setLineDash([]);
+            
+            // 전체 ECG 파형을 하나의 연속된 경로로 그리기
+            ecgCtx.strokeStyle = '#2c3e50';
+            ecgCtx.lineWidth = 3;
+            ecgCtx.beginPath();
+            ecgCtx.moveTo(20, baseline);
+            
+            // 기준선 (시작)
+            ecgCtx.lineTo(50, baseline);
+            
+            // P wave (심방 탈분극) - frame 10-30
+            if (frame >= 10) {
+                const pProgress = Math.min((frame - 10) / 20, 1);
+                for (let i = 0; i <= pProgress * 40; i++) {
+                    const angle = (i / 40) * Math.PI;
+                    const y = baseline - Math.sin(angle) * 30;
+                    const x = 50 + i;
+                    ecgCtx.lineTo(x, y);
+                }
+            }
+            
+            // PR segment (짧음) - frame 30-45
+            if (frame >= 30) {
+                ecgCtx.lineTo(90, baseline);
+                const prProgress = Math.min((frame - 30) / 15, 1);
+                const prEnd = 90 + prProgress * 30;
+                ecgCtx.lineTo(prEnd, baseline);
+            }
+            
+            // Delta wave 시작 - frame 45-80
+            if (frame >= 45) {
+                const deltaProgress = Math.min((frame - 45) / 35, 1);
+                for (let i = 0; i <= deltaProgress * 50; i++) {
+                    const y = baseline - (i / 50) * 40; // 완만한 상승
+                    const x = 120 + i;
+                    ecgCtx.lineTo(x, y);
+                }
+            }
+            
+            ecgCtx.stroke();
+            
+            // Delta wave를 빨간색으로 강조
+            if (frame >= 45) {
+                ecgCtx.strokeStyle = '#ff6b6b';
+                ecgCtx.lineWidth = 5;
+                ecgCtx.beginPath();
+                ecgCtx.moveTo(120, baseline);
+                const deltaProgress = Math.min((frame - 45) / 35, 1);
+                for (let i = 0; i <= deltaProgress * 50; i++) {
+                    const y = baseline - (i / 50) * 40;
+                    const x = 120 + i;
+                    ecgCtx.lineTo(x, y);
+                }
+                ecgCtx.stroke();
+            }
+            
+            // QRS complex (정상 전도와 합쳐짐) - frame 80-105
+            if (frame >= 80) {
+                ecgCtx.strokeStyle = '#4ecdc4';
+                ecgCtx.lineWidth = 5;
+                ecgCtx.beginPath();
+                ecgCtx.moveTo(170, baseline - 40);
+                
+                const qrsProgress = Math.min((frame - 80) / 25, 1);
+                
+                // Q wave (작은 하강)
+                ecgCtx.lineTo(175, baseline - 35);
+                
+                // R wave - 급격한 상승
+                if (qrsProgress <= 0.4) {
+                    const rProgress = qrsProgress / 0.4;
+                    const y = baseline - 35 - rProgress * 125;
+                    const x = 175 + rProgress * 15;
+                    ecgCtx.lineTo(x, y);
+                } else if (qrsProgress <= 1) {
+                    // R peak
+                    ecgCtx.lineTo(190, baseline - 160);
+                    
+                    // S wave - 급격한 하강
+                    const sProgress = (qrsProgress - 0.4) / 0.6;
+                    const y = baseline - 160 + sProgress * 180;
+                    const x = 190 + sProgress * 20;
+                    ecgCtx.lineTo(x, y);
+                }
+                ecgCtx.stroke();
+                
+                // 검은색 테두리도 추가
+                ecgCtx.strokeStyle = '#2c3e50';
+                ecgCtx.lineWidth = 3;
+                ecgCtx.beginPath();
+                ecgCtx.moveTo(170, baseline - 40);
+                ecgCtx.lineTo(175, baseline - 35);
+                if (qrsProgress <= 0.4) {
+                    const rProgress = qrsProgress / 0.4;
+                    const y = baseline - 35 - rProgress * 125;
+                    const x = 175 + rProgress * 15;
+                    ecgCtx.lineTo(x, y);
+                } else if (qrsProgress <= 1) {
+                    ecgCtx.lineTo(190, baseline - 160);
+                    const sProgress = (qrsProgress - 0.4) / 0.6;
+                    const y = baseline - 160 + sProgress * 180;
+                    const x = 190 + sProgress * 20;
+                    ecgCtx.lineTo(x, y);
+                }
+                ecgCtx.stroke();
+            }
+            
+            // ST segment - frame 105-120
+            if (frame >= 105) {
+                ecgCtx.strokeStyle = '#2c3e50';
+                ecgCtx.lineWidth = 3;
+                ecgCtx.beginPath();
+                ecgCtx.moveTo(210, baseline + 20);
+                const stProgress = Math.min((frame - 105) / 15, 1);
+                const stEnd = 210 + stProgress * 25;
+                ecgCtx.lineTo(stEnd, baseline + 20);
+                ecgCtx.stroke();
+            }
+            
+            // T wave - frame 120-150
+            if (frame >= 120) {
+                ecgCtx.strokeStyle = '#2c3e50';
+                ecgCtx.lineWidth = 3;
+                ecgCtx.beginPath();
+                ecgCtx.moveTo(235, baseline + 20);
+                const tProgress = Math.min((frame - 120) / 30, 1);
+                for (let i = 0; i <= tProgress * 60; i++) {
+                    const angle = (i / 60) * Math.PI;
+                    const y = baseline + 20 - Math.sin(angle) * 50;
+                    const x = 235 + i;
+                    ecgCtx.lineTo(x, y);
+                }
+                ecgCtx.stroke();
+            }
+            
+            // 기준선 (끝)
+            if (frame >= 150) {
+                ecgCtx.strokeStyle = '#2c3e50';
+                ecgCtx.lineWidth = 3;
+                ecgCtx.beginPath();
+                ecgCtx.moveTo(295, baseline);
+                ecgCtx.lineTo(480, baseline);
+                ecgCtx.stroke();
+            }
+            
+            // 라벨링
+            ecgCtx.fillStyle = '#2c3e50';
+            ecgCtx.font = 'bold 18px Arial';
+            if (frame >= 20) ecgCtx.fillText('P', 70, baseline - 40);
+            if (frame >= 50) {
+                ecgCtx.fillStyle = '#ff6b6b';
+                ecgCtx.font = 'bold 24px Arial';
+                ecgCtx.fillText('Δ', 145, baseline - 50);
+                ecgCtx.font = 'bold 14px Arial';
+                ecgCtx.fillText('델타파', 130, baseline - 30);
+            }
+            if (frame >= 90) {
+                ecgCtx.fillStyle = '#4ecdc4';
+                ecgCtx.font = 'bold 20px Arial';
+                ecgCtx.fillText('R', 185, baseline - 175);
+            }
+            if (frame >= 108) {
+                ecgCtx.fillStyle = '#2c3e50';
+                ecgCtx.font = 'bold 16px Arial';
+                ecgCtx.fillText('S', 205, baseline + 35);
+            }
+            if (frame >= 130) {
+                ecgCtx.font = 'bold 18px Arial';
+                ecgCtx.fillText('T', 265, baseline - 30);
+            }
+            
+            // PR interval 표시
+            if (frame >= 35 && frame < 45) {
+                ecgCtx.strokeStyle = '#e74c3c';
+                ecgCtx.lineWidth = 2;
+                ecgCtx.setLineDash([3, 3]);
+                ecgCtx.beginPath();
+                ecgCtx.moveTo(50, baseline + 60);
+                ecgCtx.lineTo(120, baseline + 60);
+                ecgCtx.stroke();
+                ecgCtx.setLineDash([]);
+                
+                ecgCtx.fillStyle = '#e74c3c';
+                ecgCtx.font = 'bold 12px Arial';
+                ecgCtx.fillText('짧은 PR interval', 55, baseline + 80);
+            }
+            
+            // QRS 표시
+            if (frame >= 85 && frame < 110) {
+                ecgCtx.strokeStyle = '#9b59b6';
+                ecgCtx.lineWidth = 2;
+                ecgCtx.setLineDash([3, 3]);
+                ecgCtx.beginPath();
+                ecgCtx.moveTo(120, baseline + 60);
+                ecgCtx.lineTo(210, baseline + 60);
+                ecgCtx.stroke();
+                ecgCtx.setLineDash([]);
+                
+                ecgCtx.fillStyle = '#9b59b6';
+                ecgCtx.font = 'bold 12px Arial';
+                ecgCtx.fillText('넓은 QRS complex', 125, baseline + 80);
+            }
+        }
+
+        function drawComparisonECGs() {
+            // 정상 ECG
+            const normalCtx = document.getElementById('normalECG').getContext('2d');
+            normalCtx.clearRect(0, 0, 320, 200);
+            
+            const normalBaseline = 100;
+            normalCtx.strokeStyle = '#4CAF50';
+            normalCtx.lineWidth = 2;
+            normalCtx.beginPath();
+            normalCtx.moveTo(20, normalBaseline);
+            
+            // P wave
+            for (let i = 0; i <= 30; i++) {
+                const angle = (i / 30) * Math.PI;
+                const y = normalBaseline - Math.sin(angle) * 15;
+                normalCtx.lineTo(20 + i, y);
+            }
+            
+            // PR segment
+            normalCtx.lineTo(80, normalBaseline);
+            
+            // QRS complex (정상 - 좁고 급격함)
+            normalCtx.lineTo(90, normalBaseline + 10);
+            normalCtx.lineTo(100, normalBaseline - 70);
+            normalCtx.lineTo(110, normalBaseline + 15);
+            normalCtx.lineTo(120, normalBaseline);
+            
+            // T wave
+            for (let i = 0; i <= 40; i++) {
+                const angle = (i / 40) * Math.PI;
+                const y = normalBaseline - Math.sin(angle) * 25;
+                normalCtx.lineTo(140 + i, y);
+            }
+            
+            normalCtx.stroke();
+            
+            // 라벨
+            normalCtx.fillStyle = '#2c3e50';
+            normalCtx.font = '12px Arial';
+            normalCtx.fillText('정상 PR interval', 20, 150);
+            normalCtx.fillText('좁은 QRS', 85, 150);
+            
+            // WPW ECG
+            const wpwCtx = document.getElementById('wpwECG').getContext('2d');
+            wpwCtx.clearRect(0, 0, 320, 200);
+            
+            wpwCtx.strokeStyle = '#f44336';
+            wpwCtx.lineWidth = 2;
+            wpwCtx.beginPath();
+            wpwCtx.moveTo(20, normalBaseline);
+            
+            // P wave
+            for (let i = 0; i <= 30; i++) {
+                const angle = (i / 30) * Math.PI;
+                const y = normalBaseline - Math.sin(angle) * 15;
+                wpwCtx.lineTo(20 + i, y);
+            }
+            
+            // 짧은 PR segment
+            wpwCtx.lineTo(60, normalBaseline);
+            
+            // Delta wave (완만한 상승)
+            wpwCtx.strokeStyle = '#ff6b6b';
+            wpwCtx.lineWidth = 3;
+            for (let i = 0; i <= 25; i++) {
+                const y = normalBaseline - (i / 25) * 20;
+                wpwCtx.lineTo(60 + i, y);
+            }
+            
+            // QRS complex (넓고 변형됨)
+            wpwCtx.strokeStyle = '#f44336';
+            wpwCtx.lineTo(90, normalBaseline - 70);
+            wpwCtx.lineTo(110, normalBaseline + 15);
+            wpwCtx.lineTo(130, normalBaseline);
+            
+            // T wave
+            for (let i = 0; i <= 40; i++) {
+                const angle = (i / 40) * Math.PI;
+                const y = normalBaseline - Math.sin(angle) * 25;
+                wpwCtx.lineTo(150 + i, y);
+            }
+            
+            wpwCtx.stroke();
+            
+            // 라벨
+            wpwCtx.fillStyle = '#2c3e50';
+            wpwCtx.font = '12px Arial';
+            wpwCtx.fillText('짧은 PR interval', 20, 150);
+            wpwCtx.fillStyle = '#ff6b6b';
+            wpwCtx.fillText('델타파', 65, 170);
+            wpwCtx.fillStyle = '#2c3e50';
+            wpwCtx.fillText('넓은 QRS', 95, 150);
+        }
+
+        function animate() {
+            if (!isAnimating) return;
+            
+            drawHeart(animationFrame);
+            drawECG(animationFrame);
+            
+            // 현재 단계 설명 업데이트
+            const phaseIndex = Math.floor(animationFrame / 30);
+            if (phaseIndex < phases.length) {
+                document.getElementById('phaseDescription').textContent = phases[phaseIndex];
+            }
+            
+            animationFrame++;
+            
+            if (animationFrame > 150) {
+                animationFrame = 0;
+            }
+            
+            animationId = requestAnimationFrame(animate);
+        }
+
+        function togglePlayPause() {
+            const btn = document.getElementById('playPauseBtn');
+            if (isAnimating) {
+                // 일시정지
+                isAnimating = false;
+                if (animationId) {
+                    cancelAnimationFrame(animationId);
+                }
+                btn.textContent = '▶️ 재생';
+            } else {
+                // 재생
+                isAnimating = true;
+                btn.textContent = '⏸️ 일시정지';
+                animate();
+            }
+        }
+
+        function startAnimation() {
+            isAnimating = true;
+            animationFrame = 0;
+            document.getElementById('playPauseBtn').textContent = '⏸️ 일시정지';
+            animate();
+        }
+
+        function resetAnimation() {
+            isAnimating = false;
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+            animationFrame = 0;
+            document.getElementById('playPauseBtn').textContent = '▶️ 시작';
+            heartCtx.clearRect(0, 0, heartCanvas.width, heartCanvas.height);
+            ecgCtx.clearRect(0, 0, ecgCanvas.width, ecgCanvas.height);
+            drawHeart(0);
+            // ECG 배경 격자와 기준선 그리기
+            ecgCtx.strokeStyle = '#ffe6e6';
+            ecgCtx.lineWidth = 1;
+            for (let i = 0; i < ecgCanvas.width; i += 20) {
+                ecgCtx.beginPath();
+                ecgCtx.moveTo(i, 0);
+                ecgCtx.lineTo(i, ecgCanvas.height);
+                ecgCtx.stroke();
+            }
+            for (let i = 0; i < ecgCanvas.height; i += 20) {
+                ecgCtx.beginPath();
+                ecgCtx.moveTo(0, i);
+                ecgCtx.lineTo(ecgCanvas.width, i);
+                ecgCtx.stroke();
+            }
+            const baseline = 250;
+            ecgCtx.strokeStyle = '#95a5a6';
+            ecgCtx.lineWidth = 2;
+            ecgCtx.setLineDash([5, 5]);
+            ecgCtx.beginPath();
+            ecgCtx.moveTo(0, baseline);
+            ecgCtx.lineTo(ecgCanvas.width, baseline);
+            ecgCtx.stroke();
+            ecgCtx.setLineDash([]);
+            document.getElementById('phaseDescription').textContent = 
+                "▶️ 시작 버튼을 눌러 애니메이션을 시작하세요. 재생 중 ⏸️ 일시정지 버튼으로 원하는 순간에 멈출 수 있습니다.";
+        }
+
+        // 초기 그리기
+        drawHeart(0);
+        drawComparisonECGs();
+    </script>
+</body>
+</html>
